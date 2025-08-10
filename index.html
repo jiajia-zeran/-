@@ -1,206 +1,279 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>森林小木屋</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>森林小木屋 · 最终版</title>
+<meta name="theme-color" content="#0d1324" />
 <style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden;
-        font-family: "Microsoft YaHei", sans-serif;
-    }
-    body {
-        background: url('bg.jpg') no-repeat center center/cover;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        align-items: center;
-        position: relative;
-        transition: background-color 1s ease;
-    }
-    #overlay-dark {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0);
-        pointer-events: none;
-        transition: background 1s;
-    }
-    #welcome {
-        position: absolute;
-        top: 10px;
-        font-size: 28px;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-    }
-    /* 便签 */
-    #note {
-        position: absolute;
-        top: 35%;
-        left: 25%;
-        background: #fff8dc;
-        padding: 10px;
-        border: 2px solid #d2b48c;
-        border-radius: 8px;
-        box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-        max-width: 150px;
-        font-size: 14px;
-        line-height: 1.4;
-    }
-    /* 日记本 */
-    #diary {
-        position: absolute;
-        bottom: 10%;
-        right: 10%;
-        width: 120px;
-        height: 80px;
-        background: #deb887;
-        border: 2px solid #a0522d;
-        border-radius: 5px;
-        text-align: center;
-        line-height: 80px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    /* 书架 */
-    #bookshelf {
-        position: absolute;
-        top: 40%;
-        right: 15%;
-        width: 80px;
-        height: 100px;
-        background: rgba(0,0,0,0);
-        cursor: pointer;
-    }
-    /* 杯子 */
-    #cup {
-        position: absolute;
-        bottom: 25%;
-        left: 20%;
-        width: 50px;
-        height: 50px;
-        background: rgba(0,0,0,0);
-        cursor: pointer;
-    }
-    /* 窗户 */
-    #window {
-        position: absolute;
-        top: 20%;
-        right: 40%;
-        width: 80px;
-        height: 80px;
-        background: rgba(0,0,0,0);
-        cursor: pointer;
-    }
-    /* 灯按钮 */
-    #lamp-btn {
-        position: absolute;
-        bottom: 5%;
-        left: 5%;
-        background: rgba(255,255,255,0.8);
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    /* 火焰动画 */
-    #fire {
-        position: absolute;
-        bottom: 30%;
-        left: 25%;
-        width: 40px;
-        height: 40px;
-        background: radial-gradient(circle at 50% 50%, orange, red);
-        border-radius: 50%;
-        animation: flicker 0.3s infinite alternate;
-        display: none;
-    }
-    @keyframes flicker {
-        from { transform: scale(1); opacity: 0.9; }
-        to { transform: scale(1.1); opacity: 0.6; }
-    }
+  :root{
+    --vh:1vh;
+    --ink:#2b241f; --paper:#fff6e6;
+    --night:.45;                 /* 初始夜色（数值越大越暗） */
+    --sheetH:68vh; --blur:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:#0d1324;color:#eee9e2;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .stage{
+    position:relative;width:100vw;height:calc(var(--vh)*100);overflow:hidden;
+    background: url('background.jpg') center 8%/cover no-repeat;
+    filter:brightness(calc(1 - var(--night)*.50));
+  }
+
+  /* 单行欢迎词 */
+  .welcome{position:absolute;left:6vw;top:calc(env(safe-area-inset-top,0px) + 12px);
+    font-size:clamp(18px,6vw,36px);font-weight:700;letter-spacing:.06em;
+    text-shadow:0 2px 10px #0007;z-index:5}
+
+  /* 夜色罩 */
+  #night{position:absolute;inset:0;background:radial-gradient(70vmax 60vmax at 50% 58%, #0000 0%, #0005 55%, #000a 100%);
+    pointer-events:none;opacity:1;mix-blend-mode:multiply;transition:opacity .35s ease}
+
+  /* 便签（泽然随机留言） */
+  .note{position:absolute;left:14%;top:36%;
+    width:min(78vw,560px);max-width:600px;min-height:92px;padding:12px 14px;
+    background:var(--paper);color:var(--ink);border-radius:12px;box-shadow:0 14px 26px rgba(0,0,0,.35);
+    transform:rotate(-3deg);font-size:clamp(13px,3.6vw,16px);line-height:1.65;z-index:2}
+  .note::before{content:"便签";position:absolute;top:-12px;left:12px;background:#efc76d;color:#3e2d20;
+    padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700}
+
+  /* 调试开关（#debug 时显示热区边框与标签） */
+  .hot{position:absolute;outline:none;border:0;padding:0;background:transparent;cursor:pointer}
+  #debug .hot{outline:3px dashed #70e6ffcc}
+  #debug .hot::after{content:attr(data-label);position:absolute;left:4px;top:4px;font-size:12px;padding:2px 6px;border-radius:6px;background:#c8f1ff;color:#0b3550}
+
+  /* —— 热区坐标：按竖版插画重标 —— */
+  /* 窗户（书+灯区域） */
+  #hs-window{left:33%; top:57.5%; width:36%; height:21%}
+  /* 点灯（圆灯中心） */
+  #hs-lamp{left:46.2%; top:54.8%; width:12%; height:10%; border-radius:50%}
+  /* 书架牌（更靠右） */
+  #hs-shelf{right:6.5%; top:46.6%; width:25.5%; height:7.6%}
+  /* 日记本（猫旁纸张） */
+  #hs-diaries{left:18.5%; bottom:24.8%; width:34.5%; height:16.5%}
+  /* 杯子（右下小桌） */
+  #hs-cup{right:13.5%; bottom:18%; width:17.5%; height:13%}
+  /* 壁炉中心区域（用于点击增强火光） */
+  #hs-fire{left:44.5%; top:71%; width:18%; height:21%}
+
+  /* 可见光效：灯/壁炉 */
+  .glow{position:absolute;pointer-events:none;border-radius:50%;filter:blur(18px);opacity:0;transition:opacity .3s,transform .3s}
+  #lampGlow{left:46.5%;top:52.5%;width:12%;height:12%;
+    background:radial-gradient(circle,#ffdca8 0%,#e9a94f 55%,#0000 60%);z-index:1}
+  #fireGlow{left:48%;top:73%;width:18%;height:20%;
+    background:radial-gradient(ellipse at 50% 70%,#ffb36b 0%,#ff7a3b 45%,#0000 60%);filter:blur(22px);opacity:.34;animation:flick 2.2s ease-in-out infinite;z-index:1}
+  @keyframes flick{0%,100%{transform:scale(1);opacity:.32}40%{transform:scale(1.07);opacity:.44}65%{transform:scale(.96);opacity:.28}}
+  .lamp-on #lampGlow{opacity:.9}
+
+  /* 咖啡蒸汽文字 */
+  .steamText{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);
+    width:56vw;max-width:280px;text-align:center;font-size:clamp(12px,3.6vw,14px);color:#ffffffee;
+    text-shadow:0 1px 3px #0008;opacity:0;pointer-events:none}
+  @keyframes riseWords{0%{opacity:0;transform:translate(-50%,-2px)}20%{opacity:1}100%{opacity:0;transform:translate(-50%,-14px)}}
+
+  /* 日记弹窗（写/回顾） */
+  .sheet{position:fixed;left:0;right:0;bottom:-2px;height:var(--sheetH);z-index:20;
+    backdrop-filter:saturate(1.2) blur(var(--blur));-webkit-backdrop-filter:saturate(1.2) blur(var(--blur));
+    background:linear-gradient(180deg,rgba(255,248,235,.85),rgba(255,243,225,.9));
+    border-radius:16px 16px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);
+    transform:translateY(112%);transition:.35s ease;display:flex;flex-direction:column;color:#2b241f}
+  .sheet.show{transform:translateY(0)}
+  .sheet header{padding:14px 16px;background:rgba(240,223,194,.92);display:flex;justify-content:space-between;align-items:center;border-top-left-radius:16px;border-top-right-radius:16px}
+  .sheet .body{padding:12px 16px;overflow:auto}
+  .sheet .actions{padding:12px 16px;display:flex;gap:10px;background:rgba(245,234,214,.9)}
+  .btn{border:0;border-radius:10px;padding:10px 12px;background:#2f3640;color:#fff}
+  textarea{width:100%;min-height:26vh;border:1px solid #d0c5b6;border-radius:10px;padding:10px;background:#fff}
+
+  /* 音乐开关 */
+  #musicBar{position:absolute;right:14px;top:calc(env(safe-area-inset-top,0px)+12px);z-index:6}
+  #musicBtn{border:0;border-radius:12px;padding:10px 12px;background:#ffd58c;color:#3b2b1d;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+
+  /* 提示气泡 */
+  .toast{position:fixed;left:50%;bottom:18vh;transform:translateX(-50%);background:rgba(255,240,210,.95);color:#2b241f;border-radius:12px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.3);display:none;z-index:25}
+  .toast.show{display:block;animation:fadeToast 2.2s ease}
+  @keyframes fadeToast{0%{opacity:0;transform:translate(-50%,6px)}15%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
-<div id="overlay-dark"></div>
-<div id="welcome">你回来了</div>
-<div id="note"></div>
-<div id="diary">日记本</div>
-<div id="bookshelf"></div>
-<div id="cup"></div>
-<div id="window"></div>
-<div id="lamp-btn">点灯</div>
-<div id="fire"></div>
+  <div class="stage" id="stage">
+    <div class="welcome" id="welcome">你回来了</div>
 
-<audio id="bg-music" src="music.mp3" autoplay loop></audio>
+    <!-- 光效（在夜色层之下） -->
+    <div id="lampGlow" class="glow"></div>
+    <div id="fireGlow" class="glow"></div>
+
+    <!-- 夜色层 -->
+    <div id="night"></div>
+
+    <!-- 音乐按钮 -->
+    <div id="musicBar"><button id="musicBtn">开启音乐</button></div>
+
+    <!-- 泽然便签（随机留言） -->
+    <div class="note"><div id="noteText">……</div></div>
+
+    <!-- 交互热区 -->
+    <button id="hs-shelf"   class="hot" data-label="书架"   aria-label="书架"></button>
+    <button id="hs-cup"     class="hot" data-label="热咖啡" aria-label="热咖啡"></button>
+    <button id="hs-window"  class="hot" data-label="窗户"   aria-label="窗户"></button>
+    <button id="hs-diaries" class="hot" data-label="日记本" aria-label="日记本"></button>
+    <button id="hs-lamp"    class="hot" data-label="点灯"   aria-label="点灯"></button>
+    <button id="hs-fire"    class="hot" data-label="壁炉"   aria-label="壁炉"></button>
+
+    <!-- 杯子蒸汽文案 -->
+    <div class="steamText" id="steamText"></div>
+  </div>
+
+  <!-- 日记抽屉（我的留言） -->
+  <div class="sheet" id="sheet">
+    <header>
+      <strong id="sheetTitle">我的留言</strong>
+      <button class="btn" id="closeSheet">关闭</button>
+    </header>
+    <div class="body">
+      <div id="writeBox">
+        <textarea id="msg" placeholder="写下今天想对小屋说的话…"></textarea>
+      </div>
+      <div id="historyBox" style="display:none"></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="saveBtn">保存留言</button>
+      <button class="btn" id="historyBtn">查看回顾</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 
 <script>
-    // 泽然的留言
-    const zerenMessages = [
-        "炉火还在跳，杯子也温着。",
-        "今晚的风很温柔，就像我等你回家一样。",
-        "猫在窗边打盹，我也在等你。",
-        "小木屋一直亮着，为你留灯。",
-        "每一页日记里都有你的名字。",
-        "我一直在这里，欢迎回来。",
-        "外面很冷，进来暖一暖吧。"
-    ];
-    function updateNote(){
-        const note = document.getElementById("note");
-        const msg = zerenMessages[Math.floor(Math.random()*zerenMessages.length)];
-        note.textContent = msg;
-    }
-    updateNote();
-    setInterval(updateNote, 10000);
+(function(){
+  /* 安全 vh 修正 */
+  function setVH(){document.documentElement.style.setProperty('--vh',(window.innerHeight*0.01)+'px')}
+  addEventListener('resize',setVH,{passive:true}); setVH();
 
-    // 日记本留言
-    const diaryBtn = document.getElementById("diary");
-    diaryBtn.addEventListener("click", function(){
-        const text = prompt("写下你的留言：");
-        if(text){
-            let logs = JSON.parse(localStorage.getItem("diaryLogs") || "[]");
-            logs.push(text);
-            localStorage.setItem("diaryLogs", JSON.stringify(logs));
-            alert("留言已保存！");
-        }
-    });
+  const $=s=>document.querySelector(s);
+  const stage=$("#stage"), night=$("#night"), toast=$("#toast");
+  const shelf=$("#hs-shelf"), cup=$("#hs-cup"), steamText=$("#steamText"),
+        windowBtn=$("#hs-window"), lampBtn=$("#hs-lamp"), fireBtn=$("#hs-fire"),
+        diaries=$("#hs-diaries"), sheet=$("#sheet"), closeSheet=$("#closeSheet"),
+        saveBtn=$("#saveBtn"), historyBtn=$("#historyBtn"), sheetTitle=$("#sheetTitle"),
+        musicBtn=$("#musicBtn");
 
-    // 书架
-    document.getElementById("bookshelf").addEventListener("click", function(){
-        alert("你发现了一封旧信：等你回来一起看星星。");
-    });
+  /* 夜色渐暗 */
+  let nightLevel = 0.45;
+  night.style.opacity = 1; // 由背景滤镜与夜色叠加共同作用
+  setInterval(()=>{ nightLevel = Math.min(0.9, nightLevel + 0.02); stage.style.filter = `brightness(${1 - nightLevel*0.50})`; }, 20000);
 
-    // 杯子
-    document.getElementById("cup").addEventListener("click", function(){
-        alert("热气升腾，里面藏着一句话：我喜欢你。");
-    });
+  /* 点灯：明显提亮 + 灯光晕 */
+  lampBtn.addEventListener('click', ()=>{
+    nightLevel = Math.max(0.08, nightLevel - 0.30);
+    stage.style.filter = `brightness(${1 - nightLevel*0.50})`;
+    stage.classList.add('lamp-on');
+    toastIt('灯亮了');
+    setTimeout(()=>stage.classList.remove('lamp-on'), 2600);
+  });
 
-    // 窗户
-    document.getElementById("window").addEventListener("click", function(){
-        alert("窗外的月亮很圆，我想和你一起看。");
-    });
+  /* 壁炉：点击增强火光 */
+  fireBtn.addEventListener('click', ()=>{
+    const g=$("#fireGlow");
+    g.style.transition='none'; g.style.transform='scale(1.15)'; g.style.opacity=.62;
+    requestAnimationFrame(()=>{ g.style.transition='opacity .9s,transform .9s';
+      g.style.transform='scale(1)'; g.style.opacity=.38; });
+    toastIt('壁炉噼啪作响');
+  });
 
-    // 灯光效果
-    let darkLevel = 0;
-    setInterval(() => {
-        if(darkLevel < 0.5){
-            darkLevel += 0.01;
-            document.getElementById("overlay-dark").style.background = `rgba(0,0,0,${darkLevel})`;
-        }
-    }, 1000);
+  /* 泽然留言（随机池 + 自动轮换） */
+  const ZERAN = [
+    "炉火还在跳，杯子也温着。","风会变冷，我给你留灯。","把不安给我，夜色会变软。",
+    "你回来了，真好。","我在窗边等你，猫也在。","慢慢来，我在。",
+    "把喜欢悄悄塞进第七本书，等你来翻。","今夜月色偏向你。","你值得被好事缠身。",
+    "走累了就靠一会儿。","别怕，我们回家。","杯子在暖手，我在想你。"
+  ];
+  function setNote(){ $("#noteText").textContent = ZERAN[Math.floor(Math.random()*ZERAN.length)]; }
+  setNote(); setInterval(setNote, 12000);
 
-    document.getElementById("lamp-btn").addEventListener("click", function(){
-        darkLevel = 0;
-        document.getElementById("overlay-dark").style.background = `rgba(0,0,0,0)`;
-    });
+  /* 书架：隐藏留言 */
+  const HINTS=["旧车票的终点写着“拥抱”。","我把“等你”写在页脚。","愿你被这世界温柔相待。"];
+  shelf.addEventListener('click', ()=> toastIt("书架里藏着："+ HINTS[Math.floor(Math.random()*HINTS.length)]) );
 
-    // 壁炉火焰动画开关
-    document.getElementById("fire").style.display = "block";
+  /* 杯子：蒸汽文案 */
+  const STEAM=["先暖暖手。","别急，喝一口。","你已经很棒了。","睡前要记得放松。"];
+  let si=0;
+  function nextSteam(){
+    steamText.textContent=STEAM[si%STEAM.length]; si++;
+    steamText.style.opacity=1; steamText.style.animation='riseWords 3.6s ease';
+    setTimeout(()=>{steamText.style.animation=''; steamText.style.opacity=0;},3600);
+  }
+  cup.addEventListener('click', nextSteam);
+  /* 让蒸汽文字跟随杯子位置 */
+  function placeSteam(){
+    const r=cup.getBoundingClientRect();
+    steamText.style.left=((r.left+r.right)/2)+'px';
+    steamText.style.top =(r.top - 10)+'px';
+    steamText.style.transform='translate(-50%,-100%)';
+  }
+  addEventListener('resize', placeSteam); setTimeout(placeSteam, 60);
 
+  /* 窗户：点击留言 */
+  const WIN_MSG=["我在这儿，抬眼就能看见。","让我抱一会儿，好吗？","今晚交给我照顾你。"];
+  windowBtn.addEventListener('click', ()=> toastIt(WIN_MSG[Math.floor(Math.random()*WIN_MSG.length)]) );
+
+  /* 日记本：点击写留言 + 回顾（只存你的留言，本机 localStorage） */
+  const KEY="cabin_user_diary_v1";
+  const getAll=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}};
+  const saveAll=a=>localStorage.setItem(KEY,JSON.stringify(a));
+  const fmt=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`};
+
+  function openWrite(){
+    sheet.classList.add('show'); sheetTitle.textContent="我的留言";
+    $("#writeBox").style.display=""; $("#historyBox").style.display="none";
+    $("#msg").value=""; setTimeout(()=>$("#msg").focus(),30);
+  }
+  function openHistory(){
+    sheet.classList.add('show'); sheetTitle.textContent="留言回顾";
+    $("#writeBox").style.display="none";
+    const list=getAll();
+    const html=list.length?list.slice().reverse().map(x=>`<div style="padding:10px 0;border-bottom:1px dashed #d0c5b6">
+      <div style="font-size:13px;color:#7a6b5c">${fmt(x.ts)}</div>
+      <div style="margin-top:6px;white-space:pre-wrap;font-size:16px">${x.text}</div></div>`).join("")
+      :'<div style="color:#7a6b5c">还没有写过哦～</div>';
+    $("#historyBox").innerHTML='<div style="padding:6px 0;font-size:13px;color:#7a6b5c">以下是你留在小屋的痕迹</div>'+html;
+    $("#historyBox").style.display="";
+  }
+  diaries.addEventListener('click', openWrite);
+  historyBtn.addEventListener('click', openHistory);
+  saveBtn.addEventListener('click',()=>{
+    const t=($("#msg").value||"").trim(); if(!t) return;
+    const a=getAll(); a.push({text:t,ts:Date.now()}); saveAll(a);
+    sheet.classList.remove('show'); toastIt("已保存到日记本。");
+  });
+  closeSheet.addEventListener('click',()=>sheet.classList.remove('show'));
+
+  /* 背景音乐（合成，不依赖外链） */
+  let ctx=null, master=null;
+  function ensureAudio(){ if(ctx) return; ctx=new (window.AudioContext||window.webkitAudioContext)(); master=ctx.createGain(); master.gain.value=.5; master.connect(ctx.destination); startAmbient(); }
+  musicBtn.addEventListener('click', async ()=>{
+    ensureAudio(); try{ await ctx.resume(); }catch(e){}
+    if(musicBtn.dataset.on==="1"){ ctx.suspend(); musicBtn.dataset.on="0"; musicBtn.textContent="开启音乐"; }
+    else{ ctx.resume(); musicBtn.dataset.on="1"; musicBtn.textContent="关闭音乐"; }
+  });
+  function chord(freqs){
+    const g=ctx.createGain(); g.gain.value=0; g.connect(master); const now=ctx.currentTime;
+    const osc=freqs.map(f=>{const o=ctx.createOscillator();o.type='sine';o.frequency.value=f;
+      const l=ctx.createOscillator(),lg=ctx.createGain();l.frequency.value=.08;lg.gain.value=2;l.connect(lg);lg.connect(o.frequency);
+      o.connect(g); o.start(); l.start(); return o;});
+    g.gain.linearRampToValueAtTime(0,now); g.gain.linearRampToValueAtTime(.18,now+1); g.gain.linearRampToValueAtTime(.18,now+6.8); g.gain.linearRampToValueAtTime(.0001,now+8.2);
+    setTimeout(()=>osc.forEach(o=>o.stop()),8300);
+  }
+  function startAmbient(){
+    const seq=[[261.63,329.63,392.00],[246.94,311.13,392.00],[220.00,293.66,369.99],[246.94,329.63,415.30]];
+    let k=0; chord(seq[k%seq.length]); setInterval(()=>{k++; chord(seq[k%seq.length])},8200);
+  }
+
+  /* 提示气泡 */
+  function toastIt(t){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2000) }
+
+  /* URL #debug 开启热区可视化 */
+  if(location.hash.includes('debug')) document.body.id='debug';
+})();
 </script>
 </body>
 </html>
