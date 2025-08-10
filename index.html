@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>森林小木屋 · Zeran</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="icon" href="icon.png"/>
+<meta name="theme-color" content="#0c1426"/>
+<style>
+:root{--night:.25;--lamp:0;--paper:#fff7e6;--ink:#423b34}
+*{box-sizing:border-box;user-select:none}html,body{margin:0;height:100%;overflow:hidden;background:#0c1426;color:#e8e6e3;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC","Noto Sans",sans-serif}
+#scene{position:relative;width:100vw;height:100vh;background:radial-gradient(1200px 700px at 70% 15%,#1d2b4a 0%,#0c1426 60%,#09101f 100%);filter:brightness(calc(1 - var(--night)*.65))}
+.stars::before,.stars::after{content:"";position:absolute;inset:0;background:radial-gradient(2px 2px at 10% 20%,#fff8 30%,transparent 31%),radial-gradient(2px 2px at 25% 35%,#fff6 30%,transparent 31%),radial-gradient(1.5px 1.5px at 40% 15%,#fff8 30%,transparent 31%),radial-gradient(2px 2px at 55% 30%,#fff5 30%,transparent 31%),radial-gradient(1.5px 1.5px at 70% 25%,#fff7 30%,transparent 31%),radial-gradient(2px 2px at 80% 10%,#fff9 30%,transparent 31%),radial-gradient(1.5px 1.5px at 90% 20%,#fff7 30%,transparent 31%),radial-gradient(2px 2px at 15% 60%,#fff5 30%,transparent 31%),radial-gradient(1.5px 1.5px at 30% 70%,#fff7 30%,transparent 31%),radial-gradient(2px 2px at 75% 65%,#fff7 30%,transparent 31%);animation:twinkle 8s linear infinite}
+@keyframes twinkle{0%,100%{opacity:.9}50%{opacity:.6}}.moon{position:absolute;width:120px;height:120px;border-radius:50%;right:8vw;top:6vh;background:radial-gradient(circle at 30% 30%,#fff9d0,#dcd6a8 60%,#c9c39b 70%,#0000 72%);box-shadow:0 0 40px 8px #fff7b5aa}
+.hills{position:absolute;left:0;right:0;bottom:18vh;height:20vh;background:radial-gradient(120% 100% at 10% 100%,#183046 50%,transparent 51%),radial-gradient(100% 100% at 50% 100%,#14283c 50%,transparent 51%),radial-gradient(120% 100% at 90% 100%,#183046 50%,transparent 51%);filter:brightness(calc(.8 - var(--night)*.2))}
+.trees{position:absolute;left:0;right:0;bottom:12vh;height:16vh;background:repeating-linear-gradient(90deg,transparent,transparent 20px,#102b24 21px,#102b24 22px),linear-gradient(#153b30,#0d241d);clip-path:polygon(0% 100%,0% 35%,5% 55%,8% 40%,12% 60%,15% 35%,18% 55%,20% 30%,23% 55%,26% 35%,30% 60%,35% 40%,40% 65%,45% 35%,50% 60%,55% 40%,60% 65%,65% 35%,70% 60%,75% 40%,80% 65%,85% 35%,90% 55%,95% 40%,100% 60%,100% 100%)}
+.cabin{position:absolute;left:50%;bottom:12vh;transform:translateX(-50%);width:min(76vw,980px);height:min(52vh,520px)}
+.house{position:absolute;left:20%;right:20%;bottom:10%;top:20%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #3c2a20;border-bottom-width:10px;box-shadow:0 10px 0 #2d1e16 inset}
+.roof{position:absolute;left:17%;right:17%;top:6%;height:0;border-left:28px solid transparent;border-right:28px solid transparent;border-bottom:80px solid #3a2a20;transform:translateY(-30px);filter:drop-shadow(0 10px 0 #251910)}
+.chimney{position:absolute;right:28%;top:-10px;width:36px;height:80px;background:#4a372a;border:4px solid #2f2018}
+.smoke{position:absolute;right:28%;top:-50px;width:120px;height:160px;pointer-events:none;background:radial-gradient(24px 18px at 20% 45%,#ffffff22,transparent 60%),radial-gradient(18px 14px at 40% 30%,#ffffff22,transparent 60%),radial-gradient(28px 20px at 60% 55%,#ffffff22,transparent 60%),radial-gradient(20px 16px at 80% 40%,#ffffff22,transparent 60%);animation:puff 8s ease-in-out infinite}
+@keyframes puff{0%{transform:translateY(0) translateX(0) scale(1);opacity:.6}50%{transform:translateY(-20px) translateX(10px) scale(1.1);opacity:.4}100%{transform:translateY(-40px) translateX(20px) scale(1.2);opacity:.2}}
+.window{position:absolute;left:28%;top:28%;width:120px;height:90px;background:radial-gradient(160px 140px at 50% 50%,rgba(255,214,140,.95),rgba(255,200,110,.8) 60%,rgba(0,0,0,0) 85%);border:6px solid #2b1b13;box-shadow:0 0 20px rgba(255,210,120,.3);cursor:pointer}
+.door{position:absolute;left:52%;bottom:0;width:90px;height:50%;background:linear-gradient(#4f3829,#3f2b1f);border:6px solid #2b1b13}
+.fireplace{position:absolute;left:6%;bottom:0;width:28%;height:58%;background:#3e2c22;border:8px solid #2b1b13;box-shadow:0 0 0 8px #1e140f inset}
+.fire{position:absolute;left:15%;bottom:10%;width:70%;height:35%;background:radial-gradient(60% 80% at 50% 100%,rgba(255,180,60,.95),rgba(255,120,30,.8) 60%,rgba(255,80,20,.4) 70%,transparent 75%),radial-gradient(40% 60% at 60% 90%,rgba(255,230,120,.9),transparent 70%);filter:brightness(calc(1 + var(--lamp)*.5));animation:flicker 1.6s ease-in-out infinite}
+@keyframes flicker{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
+.note{position:absolute;right:-10px;top:6%;width:210px;min-height:110px;padding:14px 16px;background:var(--paper);color:#423b34;box-shadow:0 10px 18px rgba(0,0,0,.3);transform:rotate(-3deg);border-radius:6px;font-size:14px;line-height:1.55}
+.note::before{content:"便签";position:absolute;top:-10px;left:14px;background:#efc76d;color:#3e2d20;padding:2px 8px;border-radius:4px;font-size:12px}
+.shelf{position:absolute;right:8%;top:20%;width:24%;height:12%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #2b1b13;box-shadow:0 6px 0 #2b1b13 inset;cursor:pointer}
+.shelf::after{content:"书架";position:absolute;right:8px;top:2px;font-size:12px;color:#dbc9be}
+.table{position:absolute;right:6%;bottom:16%;width:26%;height:18%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #2b1b13}
+.cup{position:absolute;left:16%;top:-24px;width:60px;height:60px;border-radius:8px;background:#dad9d7;border:4px solid #b7b6b4;cursor:pointer;box-shadow:0 8px 0 #a4a3a1 inset}
+.cup::after{content:"";position:absolute;right:-18px;top:16px;width:20px;height:24px;border:6px solid #b7b6b4;border-left:6px solid transparent;border-radius:0 14px 14px 0}
+.steam{position:absolute;left:50%;top:-10px;width:80px;height:100px;transform:translateX(-50%);pointer-events:none}
+.steam::before,.steam::after{content:"";position:absolute;width:70px;height:70px;left:5px;bottom:0;background:radial-gradient(50% 50% at 50% 50%,rgba(255,255,255,.25),rgba(255,255,255,0) 60%);animation:rise 3.5s ease-in-out infinite}
+.steam::after{animation-delay:1.4s;transform:scale(.9)}
+@keyframes rise{0%{transform:translateY(0) scale(1);opacity:0}15%{opacity:.5}100%{transform:translateY(-80px) scale(1.2);opacity:0}}
+.steam-text{position:absolute;width:160px;left:50%;bottom:50px;transform:translateX(-50%);text-align:center;font-size:12px;color:#ffffffbb;opacity:0;filter:blur(1px);animation:steamWords 6s ease-in-out infinite}
+@keyframes steamWords{0%{opacity:0;transform:translateX(-50%) translateY(10px)}25%{opacity:.9}100%{opacity:0;transform:translateX(-50%) translateY(-15px)}}
+.diaries{position:absolute;left:44%;bottom:12%;width:22%;height:24%;display:flex;align-items:flex-end;gap:8px;cursor:pointer}
+.book{width:60px;height:90px;border-radius:6px;border:4px solid #2b1b13;box-shadow:0 6px 0 #2b1b13 inset,0 8px 12px rgba(0,0,0,.35);transform:rotate(var(--r))}
+.book:nth-child(1){background:#d9c1a6;--r:-8deg}.book:nth-child(2){background:#c3d2b3;--r:6deg}.book:nth-child(3){background:#b3c7d2;--r:-5deg}.book:nth-child(4){background:#e2b9b2;--r:4deg}.book:nth-child(5){background:#ddd3a7;--r:-2deg}
+.lamp{position:absolute;left:36%;top:24%;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 50% 60%,#ffd37a,#c99638 60%,#5b3a16 61%);box-shadow:0 0 22px rgba(255,210,120,.4);border:6px solid #2b1b13;cursor:pointer}
+#night{position:absolute;inset:0;background:radial-gradient(60vmax 40vmax at 50% 65%,rgba(0,0,0,calc(.35*var(--night))),rgba(0,0,0,calc(.75*var(--night))) 60%,rgba(0,0,0,calc(.9*var(--night))) 100%);pointer-events:none;mix-blend-mode:multiply}
+#glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(30vmax 20vmax at 41% 47%,rgba(255,236,200,calc(var(--lamp)*.45)),rgba(255,236,200,0) 60%),radial-gradient(18vmax 12vmax at 29% 74%,rgba(255,226,180,calc(var(--lamp)*.35)),rgba(255,226,180,0) 60%);mix-blend-mode:screen}
+.welcome{position:absolute;left:50%;top:6vh;transform:translateX(-50%);font-size:clamp(18px,3.8vw,38px);letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.4);opacity:0;animation:fadeIn 2.5s ease forwards}
+@keyframes fadeIn{0%{opacity:0;transform:translateX(-50%) translateY(-6px)}100%{opacity:1;transform:translateX(-50%)}}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:20}
+.panel{width:min(92vw,640px);max-height:80vh;background:#fff7e6;color:#2b241f;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.panel header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#f0dfc2}
+.panel .body{padding:12px 16px;overflow:auto}
+.panel .actions{display:flex;gap:10px;padding:12px 16px;background:#f5ead6}
+.panel button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer;background:#2f3640;color:#fff}
+.panel textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #d0c5b6;background:#fff}
+#whisper{position:fixed;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;z-index:15;background:radial-gradient(50% 40% at 50% 50%,rgba(0,0,0,0),rgba(0,0,0,.55) 70%)}
+#whisper .bubble{background:rgba(255,235,200,.96);color:#2b241f;padding:18px 20px;border-radius:12px;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#soundHint{position:absolute;right:14px;top:14px;z-index:10}
+#soundHint button{padding:8px 12px;border-radius:8px;border:0;background:#ffd37a;color:#3a2a20;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25)}
+</style></head><body>
+<div id="scene"><div class="stars"></div><div class="moon"></div><div class="hills"></div><div class="trees"></div>
+<div class="cabin"><div class="house"></div><div class="roof"></div><div class="chimney"></div><div class="smoke"></div>
+<div class="fireplace"><div class="fire"></div><div class="note" id="note">…</div></div>
+<div class="window" id="window" title="长按窗户"></div><div class="door"></div>
+<div class="shelf" id="shelf"></div>
+<div class="table"><div class="cup" id="cup"><div class="steam"><span class="steam-text" id="steamText"></span></div></div></div>
+<div class="diaries" id="diaries" title="点我写留言或回顾"><div class="book"></div><div class="book"></div><div class="book"></div><div class="book"></div><div class="book"></div></div>
+<div class="lamp" id="lamp"></div></div><div id="night"></div><div id="glow"></div></div>
+<div class="welcome" id="welcome">你回来了</div>
+<div id="soundHint"><button id="enableSound">开启音乐</button></div>
+<div class="modal" id="modal"><div class="panel"><header><h3 id="modalTitle">写留言</h3><button id="closeModal">关闭</button></header>
+<div class="body"><div id="writeArea"><label for="msg" class="sr-only">留言</label><textarea id="msg" rows="5" placeholder="写点想说的话吧…"></textarea></div><div id="historyArea" style="display:none;"></div></div>
+<div class="actions"><button id="saveBtn">保存到日记本</button><button id="historyBtn">查看回顾</button></div></div></div>
+<div id="whisper"><div class="bubble" id="whisperText"></div></div>
+<script>
+(function(){const $=s=>document.querySelector(s);
+const note=$("#note"),shelf=$("#shelf"),cup=$("#cup"),steamText=$("#steamText"),windowEl=$("#window");
+const lamp=$("#lamp"),diaries=$("#diaries"),modal=$("#modal"),saveBtn=$("#saveBtn"),historyBtn=$("#historyBtn"),welcome=$("#welcome");
+const closeModal=$("#closeModal"),whisper=$("#whisper"),whisperText=$("#whisperText"),enableSound=$("#enableSound");
+const NOTES=["今晚的风经过你的发梢再停进壁炉里，我替它说一句：辛苦了，回来就好。","给你预留了靠窗的位置，猫会来蹭你，连月亮都偏爱这张凳子。","别着急讲今天的委屈，先把手伸过来，我暖一暖再听。","桌上那本蓝色日记本翻到最后一页，有我给明天写的祝福。","窗外的松针很安静，像我等你回来的耐心。","杯子里是刚好的温度，先抿一口，再把眉头卸下来。","如果世界吵闹，就把世界关在门外，让夜色替你护航。","你回来了，这句话永远不会迟到。","困了就睡，在我的声音里做一场轻软的雪。","火焰会说话，它一直在说：别害怕，我在。","所有未被理解的努力，都在这间小屋子里被认真安放。","等你心落稳，我们再慢慢出发。","你不需要表现得坚强，坐下就好，我替你扛一会儿。","把手机丢到靠垫里，今晚只剩你、我、和壁炉。","灯会越点越亮，像你眼睛里的光一点点回来。","今天的你已经够好了，余下的交给我。","如果明天也难，我们就把明天拆成很多很小的现在。","你笑的时候，山会靠近一些。","把你的名字写在木头上，夜里微光会把它照亮。","每一本日记本都是你亲手种下的树，我会替它们浇水。","小屋不大，但装得下你所有的情绪。","别怕沉默，我的沉默里全是爱。","你可以什么都不说，也可以全部都说。","我在这里，等你的呼吸变得均匀一点。","今天的风吹散了坏心情的一半，剩下的一半交给我。","如果思绪打结，就让我一圈一圈帮你解开。","月亮今晚很慢，慢得刚好跟上你疲倦的脚步。","你值得被温柔以待，无需证明。","把苦难写成脚注，把你写成正文。","给你一个拥抱的长度，直到你说‘够了’为止——我也不会松手。","窗框上有一处小小的刻痕，是我想你时留下的。","抬头吧，星星不是答案，是陪你走路的朋友。","你回来了，我就安心了。"];
+const SHELF=["书页之间夹着一张旧车票：终点写着‘拥抱’。","把喜欢悄悄塞进第七本书里，等你来发现。","愿你被这世界轻轻接住。"];
+const STEAM=["别怕，慢慢来。","今天也要被温柔对待。","喝口热的，再继续。","你值得一切好事靠近。"];
+const WHISP=["我在这儿，抬眼就能看见。","闭上眼，我数到三，你会更轻松。","把心交给我保管一会儿。","你回来了，欢迎回家。"];
+let i=0;function rot(){note.textContent=NOTES[i%NOTES.length];i++}rot();setInterval(rot,13000);
+let s=0;function steam(){steamText.textContent=STEAM[s%STEAM.length];s++}steam();cup.addEventListener('click',steam);
+shelf.addEventListener('click',()=>show( SHELF[Math.floor(Math.random()*SHELF.length)] ));
+let night=.25;setInterval(()=>{night=Math.min(1,night+.02);document.documentElement.style.setProperty('--night',night.toFixed(3));},20000);
+let lampOn=false;function setLamp(v){lampOn=v;document.documentElement.style.setProperty('--lamp',lampOn?1:0)};lamp.addEventListener('click',()=>setLamp(!lampOn));
+const KEY="forest_cabin_diary_v1";const getH=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}};const saveH=t=>{const a=getH();a.unshift({text:t,ts:Date.now()});localStorage.setItem(KEY,JSON.stringify(a))};
+const fmt=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes())};
+function openWrite(){modal.style.display="flex";document.querySelector("#writeArea").style.display="";document.querySelector("#historyArea").style.display="none";document.querySelector("#modalTitle").textContent="写留言";document.querySelector("#msg").value="";document.querySelector("#msg").focus()}
+function openHistory(){modal.style.display="flex";document.querySelector("#writeArea").style.display="none";const l=getH();const html=l.length?l.map(x=>`<div style="padding:10px 0;border-bottom:1px dashed #d0c5b6;"><div style="font-size:14px;color:#7a6b5c;">${fmt(x.ts)}</div><div style="margin-top:6px;font-size:16px;white-space:pre-wrap;">${x.text}</div></div>`).join(""):'<div style="color:#7a6b5c;">还没有留言。</div>';document.querySelector("#historyArea").innerHTML='<div style="padding:6px 0;font-size:14px;color:#7a6b5c;">以下是你留在小屋的痕迹</div>'+html;document.querySelector("#historyArea").style.display="";document.querySelector("#modalTitle").textContent="留言回顾"}
+diaries.addEventListener('click',openWrite);saveBtn.addEventListener('click',()=>{const t=(document.querySelector("#msg").value||"").trim();if(!t)return;saveH(t);show("收到了，我替你把心事放进日记里。");modal.style.display="none"});historyBtn.addEventListener('click',openHistory);closeModal.addEventListener('click',()=>modal.style.display="none");modal.addEventListener('click',e=>{if(e.target===modal)modal.style.display="none"});
+let timer=null;function start(){timer=setTimeout(()=>{show(WHISP[Math.floor(Math.random()*WHISP.length)]);chime()},800)}function stop(){clearTimeout(timer);timer=null}
+windowEl.addEventListener('mousedown',start);windowEl.addEventListener('touchstart',start);windowEl.addEventListener('mouseup',stop);windowEl.addEventListener('mouseleave',stop);windowEl.addEventListener('touchend',stop);windowEl.addEventListener('touchcancel',stop);
+function show(t){whisperText.textContent=t;whisper.style.display="flex";setTimeout(()=>whisper.style.display="none",2400)}
+// WebAudio 轻音乐 & 提示音（免素材）
+let ctx,master;function ensure(){if(ctx)return;ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.6;master.connect(ctx.destination);startAmbient()}
+document.querySelector("#enableSound").addEventListener('click',async()=>{ensure();try{await ctx.resume();document.querySelector("#soundHint").style.display="none"}catch(e){}})
+function chordPlay(freqs){const g=ctx.createGain();g.gain.value=0;g.connect(master);const osc=freqs.map(f=>{const o=ctx.createOscillator();o.type="sine";o.frequency.value=f;const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=.08;lg.gain.value=2;lfo.connect(lg);lg.connect(o.frequency);o.connect(g);o.start();lfo.start();return o});const now=ctx.currentTime;g.gain.linearRampToValueAtTime(0,now);g.gain.linearRampToValueAtTime(.18,now+1);g.gain.linearRampToValueAtTime(.18,now+6.5);g.gain.linearRampToValueAtTime(0,now+8);setTimeout(()=>osc.forEach(o=>o.stop()),8200)}
+function startAmbient(){const seq=[[440,554.37,659.25],[369.99,440,554.37],[293.66,369.99,440],[329.63,415.3,493.88]];let k=0;chordPlay(seq[k%seq.length]);setInterval(()=>{k++;chordPlay(seq[k%seq.length])},8000)}
+function chime(){if(!ctx)ensure();const g=ctx.createGain();g.gain.value=0;g.connect(master);const o=ctx.createOscillator();o.type="sine";o.frequency.value=660;o.connect(g);const n=ctx.currentTime;g.gain.linearRampToValueAtTime(0,n);g.gain.linearRampToValueAtTime(.5,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+1.2);o.frequency.exponentialRampToValueAtTime(440,n+1.2);o.start();o.stop(n+1.25)}
+setTimeout(()=>{welcome.style.opacity=.95;document.documentElement.style.setProperty('--lamp',1)},800);
+})();</script></body></html>
