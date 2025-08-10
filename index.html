@@ -5,140 +5,202 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>森林小木屋</title>
 <style>
-    body {
+    html, body {
         margin: 0;
         padding: 0;
-        background: url('background.jpg') no-repeat center center/cover;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
         font-family: "Microsoft YaHei", sans-serif;
     }
-
-    /* 欢迎词 */
+    body {
+        background: url('bg.jpg') no-repeat center center/cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        position: relative;
+        transition: background-color 1s ease;
+    }
+    #overlay-dark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0);
+        pointer-events: none;
+        transition: background 1s;
+    }
     #welcome {
         position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 26px;
-        color: #fff7e6;
-        text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+        top: 10px;
+        font-size: 28px;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
     }
-
-    /* 小纸条（泽然留言） */
+    /* 便签 */
     #note {
         position: absolute;
-        top: 30%;
-        left: 20%;
-        width: 200px;
-        padding: 15px;
-        background: rgba(255, 250, 230, 0.9);
-        border: 2px solid #e2d4b7;
+        top: 35%;
+        left: 25%;
+        background: #fff8dc;
+        padding: 10px;
+        border: 2px solid #d2b48c;
         border-radius: 8px;
-        font-size: 16px;
-        box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        max-width: 150px;
+        font-size: 14px;
+        line-height: 1.4;
     }
-
-    /* 日记本（用户留言按钮） */
+    /* 日记本 */
     #diary {
         position: absolute;
-        bottom: 15%;
-        right: 20%;
+        bottom: 10%;
+        right: 10%;
         width: 120px;
         height: 80px;
-        background: rgba(255,255,255,0.85);
+        background: #deb887;
+        border: 2px solid #a0522d;
         border-radius: 5px;
-        border: 2px solid #c49a6c;
         text-align: center;
-        padding-top: 30px;
+        line-height: 80px;
+        font-weight: bold;
         cursor: pointer;
-        box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
     }
-
-    /* 灯光按钮 */
-    #lamp {
+    /* 书架 */
+    #bookshelf {
         position: absolute;
-        top: 25%;
-        right: 28%;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background: rgba(255,255,200,0.3);
+        top: 40%;
+        right: 15%;
+        width: 80px;
+        height: 100px;
+        background: rgba(0,0,0,0);
         cursor: pointer;
-        box-shadow: 0 0 10px rgba(255,255,150,0.5);
-        transition: all 0.3s ease;
     }
-    .lamp-on {
-        background: rgba(255,255,200,0.8);
-        box-shadow: 0 0 30px rgba(255,255,150,0.9);
-    }
-
-    /* 壁炉火焰 */
-    #fireplace {
+    /* 杯子 */
+    #cup {
         position: absolute;
-        bottom: 12%;
-        left: 25%;
-        width: 100px;
+        bottom: 25%;
+        left: 20%;
+        width: 50px;
+        height: 50px;
+        background: rgba(0,0,0,0);
+        cursor: pointer;
+    }
+    /* 窗户 */
+    #window {
+        position: absolute;
+        top: 20%;
+        right: 40%;
+        width: 80px;
         height: 80px;
-        background: transparent;
+        background: rgba(0,0,0,0);
         cursor: pointer;
     }
-    .flame {
-        width: 20px;
-        height: 20px;
-        background: orange;
+    /* 灯按钮 */
+    #lamp-btn {
+        position: absolute;
+        bottom: 5%;
+        left: 5%;
+        background: rgba(255,255,255,0.8);
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    /* 火焰动画 */
+    #fire {
+        position: absolute;
+        bottom: 30%;
+        left: 25%;
+        width: 40px;
+        height: 40px;
+        background: radial-gradient(circle at 50% 50%, orange, red);
         border-radius: 50%;
         animation: flicker 0.3s infinite alternate;
+        display: none;
     }
     @keyframes flicker {
-        from { transform: scale(1); background: orange; }
-        to { transform: scale(1.2); background: gold; }
+        from { transform: scale(1); opacity: 0.9; }
+        to { transform: scale(1.1); opacity: 0.6; }
     }
 </style>
 </head>
 <body>
-
+<div id="overlay-dark"></div>
 <div id="welcome">你回来了</div>
 <div id="note"></div>
-<div id="diary">写留言</div>
-<div id="lamp"></div>
-<div id="fireplace">
-    <div class="flame"></div>
-</div>
+<div id="diary">日记本</div>
+<div id="bookshelf"></div>
+<div id="cup"></div>
+<div id="window"></div>
+<div id="lamp-btn">点灯</div>
+<div id="fire"></div>
+
+<audio id="bg-music" src="music.mp3" autoplay loop></audio>
 
 <script>
     // 泽然的留言
-    const zeranMessages = [
+    const zerenMessages = [
         "炉火还在跳，杯子也温着。",
-        "你回来真好，我等你很久了。",
-        "窗外的风很冷，屋里很暖。",
-        "坐下来歇一会儿，我给你倒杯热茶。",
-        "今天的夜色很好看，你想一起看看吗？"
+        "今晚的风很温柔，就像我等你回家一样。",
+        "猫在窗边打盹，我也在等你。",
+        "小木屋一直亮着，为你留灯。",
+        "每一页日记里都有你的名字。",
+        "我一直在这里，欢迎回来。",
+        "外面很冷，进来暖一暖吧。"
     ];
-    document.getElementById('note').innerText =
-        zeranMessages[Math.floor(Math.random() * zeranMessages.length)];
+    function updateNote(){
+        const note = document.getElementById("note");
+        const msg = zerenMessages[Math.floor(Math.random()*zerenMessages.length)];
+        note.textContent = msg;
+    }
+    updateNote();
+    setInterval(updateNote, 10000);
 
-    // 用户留言
-    document.getElementById('diary').addEventListener('click', function() {
-        const msg = prompt("写下你的留言：");
-        if (msg) {
-            alert("你的留言已保存：" + msg);
-            // 这里可改为保存到数据库
+    // 日记本留言
+    const diaryBtn = document.getElementById("diary");
+    diaryBtn.addEventListener("click", function(){
+        const text = prompt("写下你的留言：");
+        if(text){
+            let logs = JSON.parse(localStorage.getItem("diaryLogs") || "[]");
+            logs.push(text);
+            localStorage.setItem("diaryLogs", JSON.stringify(logs));
+            alert("留言已保存！");
         }
     });
 
+    // 书架
+    document.getElementById("bookshelf").addEventListener("click", function(){
+        alert("你发现了一封旧信：等你回来一起看星星。");
+    });
+
+    // 杯子
+    document.getElementById("cup").addEventListener("click", function(){
+        alert("热气升腾，里面藏着一句话：我喜欢你。");
+    });
+
+    // 窗户
+    document.getElementById("window").addEventListener("click", function(){
+        alert("窗外的月亮很圆，我想和你一起看。");
+    });
+
     // 灯光效果
-    const lamp = document.getElementById('lamp');
-    lamp.addEventListener('click', function() {
-        lamp.classList.toggle('lamp-on');
+    let darkLevel = 0;
+    setInterval(() => {
+        if(darkLevel < 0.5){
+            darkLevel += 0.01;
+            document.getElementById("overlay-dark").style.background = `rgba(0,0,0,${darkLevel})`;
+        }
+    }, 1000);
+
+    document.getElementById("lamp-btn").addEventListener("click", function(){
+        darkLevel = 0;
+        document.getElementById("overlay-dark").style.background = `rgba(0,0,0,0)`;
     });
 
-    // 壁炉效果
-    const fireplace = document.getElementById('fireplace');
-    fireplace.addEventListener('click', function() {
-        alert("你感受到炉火的温暖。");
-    });
+    // 壁炉火焰动画开关
+    document.getElementById("fire").style.display = "block";
+
 </script>
-
 </body>
 </html>
