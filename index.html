@@ -1,260 +1,253 @@
 <!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>森林小木屋 · Zeran</title>
-<link rel="manifest" href="manifest.json"/>
-<link rel="icon" href="icon.png"/>
-<meta name="theme-color" content="#0c1426"/>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>森林小木屋 · 童话手绘风</title>
+<link rel="manifest" href="manifest.json"/><link rel="icon" href="icon.png"/>
+<meta name="theme-color" content="#0d1324">
 <style>
-:root{--night:.25;--lamp:0;--paper:#fff7e6;--ink:#423b34}
-*{box-sizing:border-box;user-select:none}
-html,body{margin:0;height:100%;overflow:hidden;background:#0c1426;color:#e8e6e3;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC","Noto Sans",sans-serif}
-#scene{position:relative;width:100vw;height:100vh;background:radial-gradient(1200px 700px at 70% 15%,#1d2b4a 0%,#0c1426 60%,#09101f 100%);filter:brightness(calc(1 - var(--night)*.65))}
-.stars::before,.stars::after{content:"";position:absolute;inset:0;background:
-radial-gradient(2px 2px at 10% 20%,#fff8 30%,transparent 31%),
-radial-gradient(2px 2px at 25% 35%,#fff6 30%,transparent 31%),
-radial-gradient(1.5px 1.5px at 40% 15%,#fff8 30%,transparent 31%),
-radial-gradient(2px 2px at 55% 30%,#fff5 30%,transparent 31%),
-radial-gradient(1.5px 1.5px at 70% 25%,#fff7 30%,transparent 31%),
-radial-gradient(2px 2px at 80% 10%,#fff9 30%,transparent 31%),
-radial-gradient(1.5px 1.5px at 90% 20%,#fff7 30%,transparent 31%),
-radial-gradient(2px 2px at 15% 60%,#fff5 30%,transparent 31%),
-radial-gradient(1.5px 1.5px at 30% 70%,#fff7 30%,transparent 31%),
-radial-gradient(2px 2px at 75% 65%,#fff7 30%,transparent 31%);
-animation:twinkle 8s linear infinite}
-@keyframes twinkle{0%,100%{opacity:.9}50%{opacity:.6}}
-.moon{position:absolute;width:120px;height:120px;border-radius:50%;right:8vw;top:6vh;background:radial-gradient(circle at 30% 30%,#fff9d0,#dcd6a8 60%,#c9c39b 70%,#0000 72%);box-shadow:0 0 40px 8px #fff7b5aa}
-.hills{position:absolute;left:0;right:0;bottom:18vh;height:20vh;background:radial-gradient(120% 100% at 10% 100%,#183046 50%,transparent 51%),radial-gradient(100% 100% at 50% 100%,#14283c 50%,transparent 51%),radial-gradient(120% 100% at 90% 100%,#183046 50%,transparent 51%);filter:brightness(calc(.8 - var(--night)*.2))}
-.trees{position:absolute;left:0;right:0;bottom:12vh;height:16vh;background:repeating-linear-gradient(90deg,transparent,transparent 20px,#102b24 21px,#102b24 22px),linear-gradient(#153b30,#0d241d);clip-path:polygon(0% 100%,0% 35%,5% 55%,8% 40%,12% 60%,15% 35%,18% 55%,20% 30%,23% 55%,26% 35%,30% 60%,35% 40%,40% 65%,45% 35%,50% 60%,55% 40%,60% 65%,65% 35%,70% 60%,75% 40%,80% 65%,85% 35%,90% 55%,95% 40%,100% 60%,100% 100%)}
-.cabin{position:absolute;left:50%;bottom:12vh;transform:translateX(-50%);width:min(76vw,980px);height:min(52vh,520px)}/* —— 手机自适应：整屋按比例缩放 —— */
-.cabin{
-  width:980px;            /* 基准尺寸（不再用 vw） */
-  height:520px;
-  left:50%;
-  bottom:12vh;
-  transform-origin:50% 100%;
-  transform:translateX(-50%) scale(var(--s,1));
+:root{
+  --night:.25; --lamp:1;
+  --vh:1vh;            /* 真实视口高度（移动端） */
+  --paper:#fff6e6; --ink:#3b3028;
+  --sheetH:66vh;
+  --blur:18px;
 }
-
-/* 月亮、文案、便签等尺寸用 clamp，手机更友好 */
-.moon{width:clamp(82px,24vw,140px);height:clamp(82px,24vw,140px)}
-.welcome{top:clamp(3vh,6vh,7vh);font-size:clamp(18px,5.5vw,38px)}
-.note{width:clamp(170px,38vw,220px);font-size:clamp(12px,3.4vw,14px)}
-.steam-text{font-size:clamp(10px,2.8vw,13px)}
-.book{width:clamp(44px,10vw,60px);height:clamp(70px,16vw,90px)}
-.cup{width:clamp(48px,12vw,60px);height:clamp(48px,12vw,60px)}
-.lamp{width:clamp(30px,7.4vw,40px);height:clamp(30px,7.4vw,40px)}
-
-/* 小屏时把小屋稍微下移，避免顶到欢迎词 */
-@media (max-width: 480px){
-  .cabin{bottom:10vh}
-  .note{right:-6px}
-}
-
-/* 原小屋结构 */
-.house{position:absolute;left:20%;right:20%;bottom:10%;top:20%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #3c2a20;border-bottom-width:10px;box-shadow:0 10px 0 #2d1e16 inset}
-.roof{position:absolute;left:17%;right:17%;top:6%;height:0;border-left:28px solid transparent;border-right:28px solid transparent;border-bottom:80px solid #3a2a20;transform:translateY(-30px);filter:drop-shadow(0 10px 0 #251910)}
-.chimney{position:absolute;right:28%;top:-10px;width:36px;height:80px;background:#4a372a;border:4px solid #2f2018}
-.smoke{position:absolute;right:28%;top:-50px;width:120px;height:160px;pointer-events:none;background:radial-gradient(24px 18px at 20% 45%,#ffffff22,transparent 60%),radial-gradient(18px 14px at 40% 30%,#ffffff22,transparent 60%),radial-gradient(28px 20px at 60% 55%,#ffffff22,transparent 60%),radial-gradient(20px 16px at 80% 40%,#ffffff22,transparent 60%);animation:puff 8s ease-in-out infinite}
-@keyframes puff{0%{transform:translateY(0) translateX(0) scale(1);opacity:.6}50%{transform:translateY(-20px) translateX(10px) scale(1.1);opacity:.4}100%{transform:translateY(-40px) translateX(20px) scale(1.2);opacity:.2}}
-.window{position:absolute;left:28%;top:28%;width:120px;height:90px;background:radial-gradient(160px 140px at 50% 50%,rgba(255,214,140,.95),rgba(255,200,110,.8) 60%,rgba(0,0,0,0) 85%);border:6px solid #2b1b13;box-shadow:0 0 20px rgba(255,210,120,.3);cursor:pointer}
-.door{position:absolute;left:52%;bottom:0;width:90px;height:50%;background:linear-gradient(#4f3829,#3f2b1f);border:6px solid #2b1b13}
-.fireplace{position:absolute;left:6%;bottom:0;width:28%;height:58%;background:#3e2c22;border:8px solid #2b1b13;box-shadow:0 0 0 8px #1e140f inset}
-.fire{position:absolute;left:15%;bottom:10%;width:70%;height:35%;background:radial-gradient(60% 80% at 50% 100%,rgba(255,180,60,.95),rgba(255,120,30,.8) 60%,rgba(255,80,20,.4) 70%,transparent 75%),radial-gradient(40% 60% at 60% 90%,rgba(255,230,120,.9),transparent 70%);filter:brightness(calc(1 + var(--lamp)*.5));animation:flicker 1.6s ease-in-out infinite}
-@keyframes flicker{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.02)}100%{transform:translateY(0) scale(1)}}
-.note{position:absolute;right:-10px;top:6%;width:210px;min-height:110px;padding:14px 16px;background:var(--paper);color:#423b34;box-shadow:0 10px 18px rgba(0,0,0,.3);transform:rotate(-3deg);border-radius:6px;font-size:14px;line-height:1.55}
-.note::before{content:"便签";position:absolute;top:-10px;left:14px;background:#efc76d;color:#3e2d20;padding:2px 8px;border-radius:4px;font-size:12px}
-.shelf{position:absolute;right:8%;top:20%;width:24%;height:12%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #2b1b13;box-shadow:0 6px 0 #2b1b13 inset;cursor:pointer}
-.shelf::after{content:"书架";position:absolute;right:8px;top:2px;font-size:12px;color:#dbc9be}
-.table{position:absolute;right:6%;bottom:16%;width:26%;height:18%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #2b1b13}
-.cup{position:absolute;left:16%;top:-24px;width:60px;height:60px;border-radius:8px;background:#dad9d7;border:4px solid #b7b6b4;cursor:pointer;box-shadow:0 8px 0 #a4a3a1 inset}
-.cup::after{content:"";position:absolute;right:-18px;top:16px;width:20px;height:24px;border:6px solid #b7b6b4;border-left:6px solid transparent;border-radius:0 14px 14px 0}
-.steam{position:absolute;left:50%;top:-10px;width:80px;height:100px;transform:translateX(-50%);pointer-events:none}
-.steam::before,.steam::after{content:"";position:absolute;width:70px;height:70px;left:5px;bottom:0;background:radial-gradient(50% 50% at 50% 50%,rgba(255,255,255,.25),rgba(255,255,255,0) 60%);animation:rise 3.5s ease-in-out infinite}
-.steam::after{animation-delay:1.4s;transform:scale(.9)}
-@keyframes rise{0%{transform:translateY(0) scale(1);opacity:0}15%{opacity:.5}100%{transform:translateY(-80px) scale(1.2);opacity:0}}
-.steam-text{position:absolute;width:160px;left:50%;bottom:50px;transform:translateX(-50%);text-align:center;font-size:12px;color:#ffffffbb;opacity:0;filter:blur(1px);animation:steamWords 6s ease-in-out infinite}
-@keyframes steamWords{0%{opacity:0;transform:translateX(-50%) translateY(10px)}25%{opacity:.9}100%{opacity:0;transform:translateX(-50%) translateY(-15px)}}
-.diaries{position:absolute;left:44%;bottom:12%;width:22%;height:24%;display:flex;align-items:flex-end;gap:8px;cursor:pointer}
-.book{width:60px;height:90px;border-radius:6px;border:4px solid #2b1b13;box-shadow:0 6px 0 #2b1b13 inset,0 8px 12px rgba(0,0,0,.35);transform:rotate(var(--r))}
-.book:nth-child(1){background:#d9c1a6;--r:-8deg}.book:nth-child(2){background:#c3d2b3;--r:6deg}.book:nth-child(3){background:#b3c7d2;--r:-5deg}.book:nth-child(4){background:#e2b9b2;--r:4deg}.book:nth-child(5){background:#ddd3a7;--r:-2deg}
-.lamp{position:absolute;left:36%;top:24%;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 50% 60%,#ffd37a,#c99638 60%,#5b3a16 61%);box-shadow:0 0 22px rgba(255,210,120,.4);border:6px solid #2b1b13;cursor:pointer}
-#night{position:absolute;inset:0;background:radial-gradient(60vmax 40vmax at 50% 65%,rgba(0,0,0,calc(.35*var(--night))),rgba(0,0,0,calc(.75*var(--night))) 60%,rgba(0,0,0,calc(.9*var(--night))) 100%);pointer-events:none;mix-blend-mode:multiply}
-#glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(30vmax 20vmax at 41% 47%,rgba(255,236,200,calc(var(--lamp)*.45)),rgba(255,236,200,0) 60%),radial-gradient(18vmax 12vmax at 29% 74%,rgba(255,226,180,calc(var(--lamp)*.35)),rgba(255,226,180,0) 60%);mix-blend-mode:screen}
-.welcome{position:absolute;left:50%;top:6vh;transform:translateX(-50%);font-size:clamp(18px,3.8vw,38px);letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.4);opacity:0;animation:fadeIn 2.5s ease forwards}
-@keyframes fadeIn{0%{opacity:0;transform:translateX(-50%) translateY(-6px)}100%{opacity:1;transform:translateX(-50%)}}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:20}
-.panel{width:min(92vw,640px);max-height:80vh;background:#fff7e6;color:#2b241f;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 16px 40px rgba(0,0,0,.45)}
-.panel header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#f0dfc2}
-.panel .body{padding:12px 16px;overflow:auto}
-.panel .actions{display:flex;gap:10px;padding:12px 16px;background:#f5ead6}
-.panel button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer;background:#2f3640;color:#fff}
-.panel textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #d0c5b6;background:#fff}
-#whisper{position:fixed;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;z-index:15;background:radial-gradient(50% 40% at 50% 50%,rgba(0,0,0,0),rgba(0,0,0,.55) 70%)}
-#whisper .bubble{background:rgba(255,235,200,.96);color:#2b241f;padding:18px 20px;border-radius:12px;font-size:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-#soundHint{position:absolute;right:14px;top:14px;z-index:10}
-#soundHint button{padding:8px 12px;border-radius:8px;border:0;background:#ffd37a;color:#3a2a20;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25)}
-
-/* —— 温馨增强包：柔和配色、圆角与质感 —— */
-:root{--wood1:#6d4c3b;--wood2:#5a3f31;--wood-dark:#3b271c;--warm:#ffd8a6;--amber:#ffcc7a;--glow:#ffe7bd}
-.house{background:linear-gradient(180deg,var(--wood1),var(--wood2));border-color:var(--wood-dark);border-radius:14px;box-shadow:0 14px 24px rgba(0,0,0,.35),inset 0 8px 0 rgba(255,255,255,.06)}
-.roof{border-bottom-color:#3a281d;filter:drop-shadow(0 16px 0 #261910)}
-.fireplace{border-radius:10px;background:linear-gradient(180deg,#4a3326,#392618)}
-.door{border-radius:10px;background:linear-gradient(180deg,#553b2b,#3f2b1f)}
-.window{border-radius:10px;box-shadow:0 0 28px rgba(255,210,120,.45)}
-.table{border-radius:10px}.cup{filter:drop-shadow(0 6px 10px rgba(0,0,0,.25))}
-.fire{animation:flicker 1.4s ease-in-out infinite,breathe 6s ease-in-out infinite}
-@keyframes breathe{0%,100%{filter:brightness(calc(1 + var(--lamp)*.5))}50%{filter:brightness(calc(1 + var(--lamp)*.8))}}
-
-/* 窗帘、门垫、常春藤 */
-.curtain{position:absolute;left:28%;top:28%;width:120px;height:90px;pointer-events:none;overflow:hidden;border-radius:10px}
-.curtain::before,.curtain::after{content:"";position:absolute;top:0;width:50%;height:100%;background:linear-gradient(180deg,#f9e4cf,#f2d6be);opacity:.92;border-radius:0 10px 10px 0;box-shadow:inset -4px 0 0 #e8c9aa}
-.curtain::after{left:50%;border-radius:10px 0 0 10px;box-shadow:inset 4px 0 0 #e8c9aa}
-.tie{position:absolute;left:50%;top:45%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#d7a874;box-shadow:0 0 0 4px #e8c9aa}
-.doormat{position:absolute;left:52%;bottom:8%;transform:translateX(-50%);width:120px;height:34px;border-radius:8px;background:#8a5f3f;box-shadow:inset 0 6px 0 #6a462e,0 8px 16px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#f7e5cf;font-weight:600;letter-spacing:2px;font-size:12px}
-.ivy{position:absolute;right:7%;top:16%;width:160px;height:80px;pointer-events:none}
-.ivy::before{content:"";position:absolute;inset:0;background:
-radial-gradient(10px 8px at 10% 40%,#79a66e 40%,#0000 41%),
-radial-gradient(10px 8px at 22% 60%,#6f9d64 40%,#0000 41%),
-radial-gradient(10px 8px at 35% 35%,#7aaa6f 40%,#0000 41%),
-radial-gradient(10px 8px at 52% 55%,#6b975f 40%,#0000 41%),
-radial-gradient(10px 8px at 68% 40%,#7aaa6f 40%,#0000 41%),
-radial-gradient(10px 8px at 84% 62%,#6f9d64 40%,#0000 41%);filter:drop-shadow(0 4px 0 #2d4a2a)}
-
-/* 萤火虫 */
-.firefly{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,#fff6 0,#fffb 60%,#0000 70%);box-shadow:0 0 12px 3px #ffd97a88;pointer-events:none}
+/* 基础 */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#0d1324;color:#eae7e2;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC",sans-serif}
+/* 舞台（背景+光影） */
+.stage{position:relative;width:100vw;height:calc(var(--vh)*100);overflow:hidden;
+  filter:brightness(calc(1 - var(--night)*.55))}
+#bgSvg{position:absolute;inset:0;width:100%;height:100%}
+.moonGlow{position:absolute;right:8vw;top:6vh;width:24vw;max-width:160px;aspect-ratio:1;border-radius:50%;
+  box-shadow:0 0 45px 12px #ffeab4aa;pointer-events:none}
+#glow,#night{position:absolute;inset:0;pointer-events:none}
+#glow{mix-blend-mode:screen;background:
+  radial-gradient(42vw 28vw at 46% 54%, rgba(255,235,200, .42), transparent 60%),
+  radial-gradient(26vw 18vw at 58% 75%, rgba(255,220,170, .35), transparent 60%)}
+#night{background:radial-gradient(70vmax 55vmax at 48% 62%, rgba(0,0,0, .35),
+                                                   rgba(0,0,0, .78) 60%,
+                                                   rgba(0,0,0, .9) 100%)}
+/* 顶部欢迎&按钮 */
+.welcome{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);
+  transform:translateX(-50%);font-size:clamp(18px,6vw,36px);letter-spacing:2px;
+  text-shadow:0 2px 10px rgba(0,0,0,.4);opacity:0;animation:fadeIn 1.2s ease forwards}
+@keyframes fadeIn{to{opacity:1;transform:translateX(-50%)}}
+#soundBar{position:absolute;right:16px;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:5}
+#enableSound{border:0;border-radius:12px;padding:10px 12px;background:#ffd58c;color:#3b2b1d;
+  box-shadow:0 10px 26px rgba(0,0,0,.25)}
+/* 便签（固定文案） */
+.note{position:absolute;left:14%;bottom:33%;width:min(64vw,300px);max-width:340px;min-height:88px;
+  padding:12px 14px;background:var(--paper);color:var(--ink);border-radius:10px;
+  box-shadow:0 14px 26px rgba(0,0,0,.35);transform:rotate(-2.5deg);
+  font-size:clamp(12px,3.6vw,15px);line-height:1.6}
+.note::before{content:"便签";position:absolute;top:-10px;left:12px;background:#efc76d;color:#3e2d20;
+  padding:2px 8px;border-radius:4px;font-size:12px}
+/* 热区（透明按钮定位） */
+.hotspot{position:absolute;background:transparent;border:0;padding:0;margin:0;cursor:pointer}
+.hotspot:focus-visible{outline:2px dashed #ffd58c;border-radius:8px}
+/* 热区大致位置（基于背景构图百分比） */
+#hs-shelf{right:18%;top:38%;width:22%;height:6%}
+#hs-cup{right:26%;bottom:26%;width:11%;height:8%}
+#hs-window{left:33%;top:45%;width:22%;height:12%}
+#hs-diaries{left:50%;bottom:15.5%;transform:translateX(-50%);width:28%;height:10%}
+#hs-lamp{left:45%;top:43.5%;width:7.5%;height:8%;border-radius:50%}
+/* 杯子蒸汽字 */
+.steamText{position:absolute;left:50%;bottom:calc(26% + 9%);transform:translateX(-50%);
+  width:56vw;max-width:280px;text-align:center;font-size:clamp(12px,3.6vw,14px);
+  color:#ffffffd0;filter:blur(.2px);opacity:0;pointer-events:none}
+/* 底部毛玻璃弹窗（留言/回顾） */
+.sheet{position:fixed;left:0;right:0;bottom:-2px;height:var(--sheetH);z-index:20;
+  backdrop-filter:saturate(1.2) blur(var(--blur));-webkit-backdrop-filter:saturate(1.2) blur(var(--blur));
+  background:linear-gradient(180deg,rgba(255,248,235,.75),rgba(255,243,225,.78));
+  border-radius:16px 16px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);
+  transform:translateY(110%);transition:.35s ease;display:flex;flex-direction:column;color:#2b241f}
+.sheet.show{transform:translateY(0)}
+.sheet header{padding:14px 16px;background:rgba(240,223,194,.85);display:flex;justify-content:space-between;align-items:center;border-top-left-radius:16px;border-top-right-radius:16px}
+.sheet .body{padding:12px 16px;overflow:auto}
+.sheet .actions{padding:12px 16px;display:flex;gap:10px;background:rgba(245,234,214,.85)}
+.sheet button{border:0;border-radius:10px;padding:10px 12px;background:#2f3640;color:#fff}
+textarea{width:100%;min-height:28vh;border:1px solid #d0c5b6;border-radius:10px;padding:10px;background:#fff}
+.toast{position:fixed;left:50%;bottom:18vh;transform:translateX(-50%);background:rgba(255,240,210,.95);
+  color:#2b241f;border-radius:12px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.3);display:none;z-index:25}
+.toast.show{display:block;animation:fadeToast 2.2s ease}
+@keyframes fadeToast{0%{opacity:0;transform:translate(-50%,6px)}15%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}
+@keyframes riseWords{0%{opacity:0;transform:translate(-50%,6px)}20%{opacity:.95}100%{opacity:0;transform:translate(-50%,-12px)}}
+/* 小屏微调 */
+@media (max-width:480px){ :root{--sheetH:68vh} .note{left:10%;bottom:33%} }
 </style>
-</head><body>
-<div id="scene">
-  <div class="stars"></div><div class="moon"></div><div class="hills"></div><div class="trees"></div>
-  <div class="cabin">
-    <div class="house"></div><div class="roof"></div><div class="chimney"></div><div class="smoke"></div>
-    <div class="fireplace"><div class="fire"></div><div class="note" id="note">…</div></div>
-    <div class="window" id="window" title="长按窗户">
-      <!-- 小猫剪影 -->
-      <svg viewBox="0 0 120 90" style="position:absolute;inset:0">
-        <ellipse cx="35" cy="65" rx="24" ry="12" fill="#3a2a20" opacity=".45"/>
-        <circle cx="36" cy="50" r="16" fill="#3a2a20" opacity=".65"/>
-        <path d="M20,50 L28,38 L36,50 Z" fill="#3a2a20" opacity=".65"/>
-        <path d="M52,50 L60,38 L68,50 Z" fill="#3a2a20" opacity=".65"/>
-        <ellipse id="eyeL" cx="32" cy="46" rx="2" ry="2" fill="#ffebad"/>
-        <ellipse id="eyeR" cx="42" cy="46" rx="2" ry="2" fill="#ffebad"/>
-      </svg>
-    </div>
-    <div class="curtain"><div class="tie"></div></div>
-    <div class="doormat">HOME</div>
-    <div class="ivy"></div>
+</head>
+<body>
+<div class="stage" id="stage">
+  <!-- 内联“手绘风”背景（SVG 水彩质感 + 猫） -->
+  <svg id="bgSvg" viewBox="0 0 900 1600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#23324e"/>
+        <stop offset="60%" stop-color="#152038"/>
+        <stop offset="100%" stop-color="#0d1324"/>
+      </linearGradient>
+      <linearGradient id="warmWin" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#ffe8b8"/>
+        <stop offset="100%" stop-color="#ffc87a"/>
+      </linearGradient>
+      <filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence baseFrequency="0.9" numOctaves="2" seed="2" type="fractalNoise" result="n"/>
+        <feColorMatrix type="saturate" values="0.2"/>
+        <feBlend in="SourceGraphic" in2="n" mode="overlay"/>
+        <feGaussianBlur stdDeviation="0.35"/>
+      </filter>
+      <filter id="edges" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence baseFrequency="0.015" numOctaves="3" seed="4" />
+        <feDisplacementMap in="SourceGraphic" scale="3" />
+      </filter>
+    </defs>
+    <!-- 天空 -->
+    <rect width="900" height="1600" fill="url(#sky)"/>
+    <!-- 远山 -->
+    <g opacity="0.55" filter="url(#paper)">
+      <path d="M0 1100 C 180 980, 320 980, 520 1100 C 700 1190, 820 1180, 900 1120 L900 1600 L0 1600 Z" fill="#132537"/>
+      <path d="M0 1180 C 200 1060, 420 1060, 660 1180 C 780 1240, 860 1240, 900 1200 L900 1600 L0 1600 Z" fill="#0f2030" opacity=".8"/>
+    </g>
+    <!-- 树影 -->
+    <g fill="#0b1a20" opacity=".65">
+      <path d="M80 1250 l50 -160 l50 160 z"/>
+      <path d="M200 1280 l60 -180 l60 180 z"/>
+      <path d="M760 1270 l50 -170 l50 170 z"/>
+      <path d="M640 1240 l45 -150 l45 150 z"/>
+    </g>
+    <!-- 小木屋主体（居中偏下，比例更大） -->
+    <g transform="translate(160,900)" filter="url(#edges)">
+      <rect x="0" y="120" width="580" height="280" rx="18" fill="#6a4e3b"/>
+      <rect x="0" y="120" width="580" height="280" rx="18" fill="#5a3f31" opacity=".6"/>
+      <!-- 屋顶 -->
+      <path d="M-20 140 L290 0 L600 140 Z" fill="#3a2a20"/>
+      <!-- 烟囱 -->
+      <rect x="420" y="10" width="40" height="80" fill="#4a372a"/>
+      <!-- 门 -->
+      <rect x="360" y="220" width="90" height="180" rx="10" fill="#4f3829"/>
+      <!-- 窗户（暖光） -->
+      <rect x="120" y="200" width="140" height="110" rx="12" fill="url(#warmWin)"/>
+      <!-- 窗中猫剪影 -->
+      <g transform="translate(160,230)">
+        <ellipse cx="0" cy="60" rx="24" ry="12" fill="#3a2a20" opacity=".45"/>
+        <circle cx="0" cy="45" r="16" fill="#3a2a20" opacity=".65"/>
+        <path d="M-16,45 L-8,33 L0,45 Z" fill="#3a2a20" opacity=".65"/>
+        <path d="M16,45 L24,33 L32,45 Z" fill="#3a2a20" opacity=".65"/>
+        <circle cx="-4" cy="40" r="2" fill="#ffebad"/>
+        <circle cx="6"  cy="40" r="2" fill="#ffebad"/>
+      </g>
+      <!-- 壁炉口光 -->
+      <ellipse cx="70" cy="360" rx="60" ry="28" fill="#f6b76a" opacity=".55"/>
+      <!-- 书架位置（示意木板） -->
+      <rect x="430" y="180" width="120" height="26" rx="6" fill="#6a4e3b"/>
+    </g>
+    <!-- 地面草地 -->
+    <rect x="0" y="1400" width="900" height="200" fill="#0c1c18"/>
+    <!-- 星星 -->
+    <g fill="#fff" opacity=".8">
+      <circle cx="120" cy="140" r="1.2"/><circle cx="280" cy="220" r="1.5"/>
+      <circle cx="540" cy="90" r="1.3"/><circle cx="720" cy="180" r="1.1"/>
+      <circle cx="820" cy="60" r="1.4"/>
+    </g>
+  </svg>
 
-    <div class="door"></div>
-    <div class="shelf" id="shelf"></div>
+  <div class="moonGlow"></div>
+  <div class="welcome" id="welcome">你回来了 · 我在这儿</div>
+  <div id="soundBar"><button id="enableSound">开启音乐</button></div>
 
-    <div class="table">
-      <div class="cup" id="cup">
-        <div class="steam"><span class="steam-text" id="steamText"></span></div>
-      </div>
-    </div>
-    <div class="diaries" id="diaries" title="点我写留言或回顾">
-      <div class="book"></div><div class="book"></div><div class="book"></div><div class="book"></div><div class="book"></div>
-    </div>
-    <div class="lamp" id="lamp"></div>
-  </div>
-  <div id="night"></div><div id="glow"></div>
+  <!-- 固定文案便签 -->
+  <div class="note" id="note">炉火还在跳，杯子也温着。</div>
+
+  <!-- 交互热区（透明按钮） -->
+  <button id="hs-shelf"  class="hotspot" title="书架"></button>
+  <button id="hs-cup"    class="hotspot" title="热咖啡"></button>
+  <button id="hs-window" class="hotspot" title="窗户（长按）"></button>
+  <button id="hs-diaries"class="hotspot" title="日记本"></button>
+  <button id="hs-lamp"   class="hotspot" title="点灯"></button>
+
+  <!-- 杯子蒸汽字 -->
+  <div class="steamText" id="steamText"></div>
+
+  <!-- 光影与夜色 -->
+  <div id="glow"></div><div id="night"></div>
 </div>
 
-<div class="welcome" id="welcome">你回来了 · 我在这儿</div>
-<div id="soundHint"><button id="enableSound">开启音乐</button></div>
-
-<!-- 留言/回顾弹窗 -->
-<div class="modal" id="modal">
-  <div class="panel">
-    <header><h3 id="modalTitle">写留言</h3><button id="closeModal">关闭</button></header>
-    <div class="body">
-      <div id="writeArea"><label for="msg" class="sr-only">留言</label><textarea id="msg" rows="5" placeholder="写点想说的话吧…"></textarea></div>
-      <div id="historyArea" style="display:none;"></div>
+<!-- 底部毛玻璃弹窗：写留言 / 回顾 -->
+<div class="sheet" id="sheet">
+  <header><strong id="sheetTitle">写留言</strong><button id="closeSheet">关闭</button></header>
+  <div class="body">
+    <div id="writeBox">
+      <textarea id="msg" placeholder="写点想说的话吧…"></textarea>
     </div>
-    <div class="actions"><button id="saveBtn">保存到日记本</button><button id="historyBtn">查看回顾</button></div>
+    <div id="historyBox" style="display:none"></div>
+  </div>
+  <div class="actions">
+    <button id="saveBtn">保存到日记本</button>
+    <button id="historyBtn">查看回顾</button>
   </div>
 </div>
 
-<!-- 窗口长按提示 -->
-<div id="whisper"><div class="bubble" id="whisperText"></div></div>
+<div class="toast" id="toast"></div>
 
 <script>
-(function(){// —— 根据窗口计算缩放比例（手机适配）——
-function fitCabin(){
-  const baseW=980, baseH=520;               // 小屋基准尺寸
-  const w=window.innerWidth, h=window.innerHeight;
-  // 屏幕宽度和可用高度同时约束；预留上方欢迎词和下方草地
-  const scaleW = (w*0.92)/baseW;
-  const scaleH = ((h*0.70))/baseH;
-  const s = Math.min(scaleW, scaleH, 1.15); // 适当限制最大放大
-  document.documentElement.style.setProperty('--s', s.toFixed(3));
-}
-window.addEventListener('resize', fitCabin, {passive:true});
-fitCabin();
+(function(){
+/* 真实视口高度（移动端适配） */
+function setVH(){document.documentElement.style.setProperty('--vh', (window.innerHeight*0.01)+'px')}
+addEventListener('resize', setVH, {passive:true}); setVH();
+
 const $=s=>document.querySelector(s);
-const note=$("#note"),shelf=$("#shelf"),cup=$("#cup"),steamText=$("#steamText"),windowEl=$("#window");
-const lamp=$("#lamp"),diaries=$("#diaries"),modal=$("#modal"),saveBtn=$("#saveBtn"),historyBtn=$("#historyBtn"),welcome=$("#welcome");
-const closeModal=$("#closeModal"),whisper=$("#whisper"),whisperText=$("#whisperText"),enableSound=$("#enableSound");
-const NOTES=["今晚的风经过你的发梢再停进壁炉里，我替它说一句：辛苦了，回来就好。","给你预留了靠窗的位置，猫会来蹭你，连月亮都偏爱这张凳子。","别着急讲今天的委屈，先把手伸过来，我暖一暖再听。","桌上那本蓝色日记本翻到最后一页，有我给明天写的祝福。","窗外的松针很安静，像我等你回来的耐心。","杯子里是刚好的温度，先抿一口，再把眉头卸下来。","如果世界吵闹，就把世界关在门外，让夜色替你护航。","你回来了，这句话永远不会迟到。","困了就睡，在我的声音里做一场轻软的雪。","火焰会说话，它一直在说：别害怕，我在。","所有未被理解的努力，都在这间小屋子里被认真安放。","等你心落稳，我们再慢慢出发。","你不需要表现得坚强，坐下就好，我替你扛一会儿。","把手机丢到靠垫里，今晚只剩你、我、和壁炉。","灯会越点越亮，像你眼睛里的光一点点回来。","今天的你已经够好了，余下的交给我。","如果明天也难，我们就把明天拆成很多很小的现在。","你笑的时候，山会靠近一些。","把你的名字写在木头上，夜里微光会把它照亮。","每一本日记本都是你亲手种下的树，我会替它们浇水。","小屋不大，但装得下你所有的情绪。","别怕沉默，我的沉默里全是爱。","你可以什么都不说，也可以全部都说。","我在这里，等你的呼吸变得均匀一点。","今天的风吹散了坏心情的一半，剩下的一半交给我。","如果思绪打结，就让我一圈一圈帮你解开。","月亮今晚很慢，慢得刚好跟上你疲倦的脚步。","你值得被温柔以待，无需证明。","把苦难写成脚注，把你写成正文。","给你一个拥抱的长度，直到你说‘够了’为止——我也不会松手。","窗框上有一处小小的刻痕，是我想你时留下的。","抬头吧，星星不是答案，是陪你走路的朋友。","你回来了，我就安心了。"];
-const SHELF=["书页之间夹着一张旧车票：终点写着‘拥抱’。","把喜欢悄悄塞进第七本书里，等你来发现。","愿你被这世界轻轻接住。"];
+const shelf=$("#hs-shelf"), cup=$("#hs-cup"), steamText=$("#steamText"),
+      windowBtn=$("#hs-window"), lampBtn=$("#hs-lamp"), diaries=$("#hs-diaries"),
+      sheet=$("#sheet"), closeSheet=$("#closeSheet"), saveBtn=$("#saveBtn"),
+      historyBtn=$("#historyBtn"), sheetTitle=$("#sheetTitle"), toast=$("#toast"),
+      enableSound=$("#enableSound");
+
+/* 夜色渐暗 & 点灯 */
+let night=.25; setInterval(()=>{ night=Math.min(1, night+.02); document.documentElement.style.setProperty('--night', night.toFixed(3)); }, 20000);
+let lamp=true; function setLamp(v){ lamp=v; document.documentElement.style.setProperty('--lamp', v?1:0); }
+lampBtn.addEventListener('click',()=>setLamp(!lamp));
+
+/* 蒸汽文字 */
 const STEAM=["别怕，慢慢来。","今天也要被温柔对待。","喝口热的，再继续。","你值得一切好事靠近。"];
-const WHISP=["我在这儿，抬眼就能看见。","闭上眼，我数到三，你会更轻松。","把心交给我保管一会儿。","你回来了，欢迎回家。"];
+let si=0; function nextSteam(){ steamText.textContent=STEAM[si%STEAM.length]; si++; steamText.style.animation='riseWords 3.6s ease'; setTimeout(()=>steamText.style.animation='',3600); }
+cup.addEventListener('click', nextSteam); nextSteam();
 
-let i=0;function rot(){note.textContent=NOTES[i%NOTES.length];i++}rot();setInterval(rot,13000);
-let s=0;function steam(){steamText.textContent=STEAM[s%STEAM.length];s++}steam();cup.addEventListener('click',steam);
+/* 书架彩蛋 & 提示泡 */
+const SHELF_HINT=["书页之间夹着一张旧车票：终点写着“拥抱”。","把喜欢悄悄塞进第七本书里，等你来发现。","愿你被这世界轻轻接住。"];
+function toastIt(t){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2000) }
+shelf.addEventListener('click',()=>toastIt(SHELF_HINT[Math.floor(Math.random()*SHELF_HINT.length)]));
 
-shelf.addEventListener('click',()=>{ show(SHELF[Math.floor(Math.random()*SHELF.length)]); shelf.animate([{transform:'translateZ(0)'},{transform:'translateY(2px) scale(1.02)'},{transform:'translateZ(0)'}],{duration:260,easing:'ease-out'}); });
+/* 窗户长按：低语 + 提示音 */
+const WHISPER=["我在这儿，抬眼就能看见。","闭上眼，我数到三，你会更轻松。","把心交给我保管一会儿。","你回来了，欢迎回家。"];
+let hold=null; function startHold(){ hold=setTimeout(()=>{ toastIt(WHISPER[Math.floor(Math.random()*WHISP
+ER.length)]); chime(); }, 700) }
+function endHold(){ clearTimeout(hold); hold=null }
+['mousedown','touchstart'].forEach(e=>windowBtn.addEventListener(e,startHold));
+['mouseup','mouseleave','touchend','touchcancel'].forEach(e=>windowBtn.addEventListener(e,endHold));
 
-let night=.25;setInterval(()=>{night=Math.min(1,night+.02);document.documentElement.style.setProperty('--night',night.toFixed(3));},20000);
-let lampOn=false;function setLamp(v){lampOn=v;document.documentElement.style.setProperty('--lamp',lampOn?1:0)} lamp.addEventListener('click',()=>setLamp(!lampOn));
-
-const KEY="forest_cabin_diary_v1";
+/* 日记：本地存储 + 底部弹窗 */
+const KEY="cabin_diary_v3";
 const getH=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}};
 const saveH=t=>{const a=getH();a.unshift({text:t,ts:Date.now()});localStorage.setItem(KEY,JSON.stringify(a))};
-const fmt=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes())};
-function openWrite(){modal.style.display="flex";$("#writeArea").style.display="";$("#historyArea").style.display="none";$("#modalTitle").textContent="写留言";$("#msg").value="";$("#msg").focus()}
-function openHistory(){modal.style.display="flex";$("#writeArea").style.display="none";const l=getH();const html=l.length?l.map(x=>`<div style="padding:10px 0;border-bottom:1px dashed #d0c5b6;"><div style="font-size:14px;color:#7a6b5c;">${fmt(x.ts)}</div><div style="margin-top:6px;font-size:16px;white-space:pre-wrap;">${x.text}</div></div>`).join(""):'<div style="color:#7a6b5c;">还没有留言。</div>';$("#historyArea").innerHTML='<div style="padding:6px 0;font-size:14px;color:#7a6b5c;">以下是你留在小屋的痕迹</div>'+html;$("#historyArea").style.display="";$("#modalTitle").textContent="留言回顾"}
-diaries.addEventListener('click',openWrite);
-saveBtn.addEventListener('click',()=>{const t=($("#msg").value||"").trim();if(!t)return;saveH(t);show("收到了，我替你把心事放进日记里。");modal.style.display="none"});
-historyBtn.addEventListener('click',openHistory);
-closeModal.addEventListener('click',()=>modal.style.display="none");
-modal.addEventListener('click',e=>{if(e.target===modal)modal.style.display="none"});
+const fmt=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`};
+function openWrite(){sheet.classList.add('show');sheetTitle.textContent="写留言";$("#writeBox").style.display="";$("#historyBox").style.display="none";$("#msg").value="";setTimeout(()=>$("#msg").focus(),50)}
+function openHistory(){sheet.classList.add('show');sheetTitle.textContent="留言回顾";$("#writeBox").style.display="none";
+  const list=getH(); const html=list.length?list.map(x=>`<div style="padding:10px 0;border-bottom:1px dashed #d0c5b6"><div style="font-size:14px;color:#7a6b5c">${fmt(x.ts)}</div><div style="margin-top:6px;white-space:pre-wrap;font-size:16px">${x.text}</div></div>`).join(""):'<div style="color:#7a6b5c">还没有留言。</div>';
+  $("#historyBox").innerHTML='<div style="padding:6px 0;font-size:14px;color:#7a6b5c">以下是你留在小屋的痕迹</div>'+html; $("#historyBox").style.display=""}
+diaries.addEventListener('click',openWrite); historyBtn.addEventListener('click',openHistory);
+saveBtn.addEventListener('click',()=>{const t=($("#msg").value||"").trim(); if(!t) return; saveH(t); sheet.classList.remove('show'); toastIt("收到了，我替你把心事放进日记里。")});
+closeSheet.addEventListener('click',()=>sheet.classList.remove('show'));
 
-let timer=null;function start(){timer=setTimeout(()=>{show(WHISP[Math.floor(Math.random()*WHISP.length)]);chime()},800)}function stop(){clearTimeout(timer);timer=null}
-windowEl.addEventListener('mousedown',start);windowEl.addEventListener('touchstart',start);
-windowEl.addEventListener('mouseup',stop);windowEl.addEventListener('mouseleave',stop);
-windowEl.addEventListener('touchend',stop);windowEl.addEventListener('touchcancel',stop);
-
-function show(t){whisperText.textContent=t;whisper.style.display="flex";setTimeout(()=>whisper.style.display="none",2400)}
-
-// —— WebAudio 轻音乐 & 提示音（免素材）——
-let ctx,master;function ensure(){if(ctx)return;ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=.6;master.connect(ctx.destination);startAmbient()}
-enableSound.addEventListener('click',async()=>{ensure();try{await ctx.resume();$("#soundHint").style.display="none"}catch(e){}})
-function chordPlay(freqs){const g=ctx.createGain();g.gain.value=0;g.connect(master);const osc=freqs.map(f=>{const o=ctx.createOscillator();o.type="sine";o.frequency.value=f;const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=.08;lg.gain.value=2;lfo.connect(lg);lg.connect(o.frequency);o.connect(g);o.start();lfo.start();return o});const now=ctx.currentTime;g.gain.linearRampToValueAtTime(0,now);g.gain.linearRampToValueAtTime(.18,now+1);g.gain.linearRampToValueAtTime(.18,now+6.5);g.gain.linearRampToValueAtTime(0,now+8);setTimeout(()=>osc.forEach(o=>o.stop()),8200)}
-function startAmbient(){const seq=[[440,554.37,659.25],[369.99,440,554.37],[293.66,369.99,440],[329.63,415.3,493.88]];let k=0;chordPlay(seq[k%seq.length]);setInterval(()=>{k++;chordPlay(seq[k%seq.length])},8000)}
-function chime(){if(!ctx)ensure();const g=ctx.createGain();g.gain.value=0;g.connect(master);const o=ctx.createOscillator();o.type="sine";o.frequency.value=660;o.connect(g);const n=ctx.currentTime;g.gain.linearRampToValueAtTime(0,n);g.gain.linearRampToValueAtTime(.5,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+1.2);o.frequency.exponentialRampToValueAtTime(440,n+1.2);o.start();o.stop(n+1.25)}
-
-// —— 萤火虫 —— 
-function spawnFireflies(n=14){
-  const scene=document.getElementById('scene');
-  for(let i=0;i<n;i++){
-    const f=document.createElement('div'); f.className='firefly';
-    const x=Math.random()*window.innerWidth, y=Math.random()*window.innerHeight*0.8;
-    f.style.left=x+'px'; f.style.top=y+'px'; scene.appendChild(f);
-    const t=4000+Math.random()*6000, dx=(Math.random()*2-1)*60, dy=(Math.random()*2-1)*40;
-    f.animate([{transform:'translate(0,0)',opacity:.6},{transform:`translate(${dx}px,${dy}px)`,opacity:.9},{transform:'translate(0,0)',opacity:.4}],{duration:t,iterations:Infinity,easing:'ease-in-out'});
-  }
-}
-spawnFireflies(14);
-
-// —— 猫咪眨眼 —— 
-setInterval(()=>{
-  const l=document.getElementById('eyeL'), r=document.getElementById('eyeR');
-  if(!l||!r) return;
-  l.animate([{ry:2},{ry:.2},{ry:2}],{duration:280});
-  r.animate([{ry:2},{ry:.2},{ry:2}],{duration:280});
-}, 3800+Math.random()*1200);
-
-setTimeout(()=>{welcome.style.opacity=.95;document.documentElement.style.setProperty('--lamp',1)},800);
-})();</script>
+/* WebAudio：环境和提示音（免素材） */
+let ctx,master; function ensureAudio(){ if(ctx) return; ctx=new (window.AudioContext||window.webkitAudioContext)(); master=ctx.createGain(); master.gain.value=.6; master.connect(ctx.destination); startAmbient(); }
+enableSound.addEventListener('click', async ()=>{ ensureAudio(); try{ await ctx.resume(); enableSound.parentElement.style.display='none' }catch(e){} });
+function chord(f){const g=ctx.createGain();g.gain.value=0;g.connect(master);const now=ctx.currentTime;
+  const osc=f.map(x=>{const o=ctx.createOscillator();o.type='sine';o.frequency.value=x;const l=ctx.createOscillator(),lg=ctx.createGain();l.frequency.value=.08;lg.gain.value=2;l.connect(lg);lg.connect(o.frequency);o.connect(g);o.start();l.start();return o});
+  g.gain.linearRampToValueAtTime(0,now);g.gain.linearRampToValueAtTime(.18,now+1);g.gain.linearRampToValueAtTime(.18,now+6.5);g.gain.linearRampToValueAtTime(0,now+8);
+  setTimeout(()=>osc.forEach(o=>o.stop()),8200)}
+function startAmbient(){const seq=[[440,554.37,659.25],[369.99,440,554.37],[293.66,369.99,440],[329.63,415.3,493.88]];let k=0;chord(seq[k%seq.length]);setInterval(()=>{k++;chord(seq[k%seq.length])},8000)}
+function chime(){if(!ctx)ensureAudio();const g=ctx.createGain();g.gain.value=0;g.connect(master);const o=ctx.createOscillator();o.type='sine';o.frequency.value=660;o.connect(g);const n=ctx.currentTime;g.gain.linearRampToValueAtTime(0,n);g.gain.linearRampToValueAtTime(.5,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+1.2);o.frequency.exponentialRampToValueAtTime(440,n+1.2);o.start();o.stop(n+1.25)}
+})();
+</script>
 </body></html>
