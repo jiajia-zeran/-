@@ -1,217 +1,281 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>森林小木屋 · 手绘版</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.png">
-<meta name="theme-color" content="#0d1324">
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>森林小木屋 · Zeran</title>
+
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon.png" />
+<meta name="theme-color" content="#0e1524" />
+
 <style>
-:root{
-  --night:.18;                 /* 夜色初始强度 */
-  --vh:1vh;                    /* 安全 vh */
-  --paper:#fff6e6; --ink:#3b3028;
-  --sheetH:66vh; --blur:18px;
-}
-/* 基础 */
-*{box-sizing:border-box} html,body{height:100%;margin:0;background:#0d1324;color:#eee9e2;
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
-.stage{
-  position:relative;width:100vw;height:calc(var(--vh)*100);overflow:hidden;
-  background:
-    radial-gradient(70vmax 55vmax at 50% 58%, rgba(0,0,0,.22), rgba(0,0,0,.72) 60%, rgba(0,0,0,.9) 100%),
-    url('background.jpg') center 8%/cover no-repeat;
-  filter:brightness(calc(1 - var(--night)*.55));
-}
-.moonGlow{position:absolute;right:7vw;top:6vh;width:24vw;max-width:160px;aspect-ratio:1;border-radius:50%;
-  box-shadow:0 0 45px 12px #ffeab466;pointer-events:none}
-.welcome{
-  position:absolute;left:6vw;top:calc(env(safe-area-inset-top,0px) + 10px);
-  font-size:clamp(18px,6.2vw,36px);letter-spacing:2px;text-shadow:0 2px 10px rgba(0,0,0,.4);
-  opacity:0;animation:fadeIn 1.2s ease forwards
-}
-@keyframes fadeIn{to{opacity:1}}
-#soundBar{position:absolute;right:16px;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:5}
-#enableSound{border:0;border-radius:12px;padding:10px 12px;background:#ffd58c;color:#3b2b1d;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+  :root{
+    --ui:#f2e7d8;
+    --ink:#2b2f38;
+    --hint:#8fb6ff55;
+    --accent:#e3c087;
+  }
 
-/* 便签（按新图右上） */
-.note{
-  position:absolute; left:17%; top:35%;
-  width:min(76vw,560px); max-width:600px; min-height:92px; padding:12px 14px;
-  background:var(--paper); color:var(--ink); border-radius:12px; box-shadow:0 14px 26px rgba(0,0,0,.35);
-  transform:rotate(-3deg); font-size:clamp(12px,3.8vw,16px); line-height:1.65
-}
-.note::before{content:"便签";position:absolute;top:-10px;left:12px;background:#efc76d;color:#3e2d20;padding:2px 8px;border-radius:4px;font-size:12px}
+  html,body{height:100%;margin:0;background:#0e1524;color:#fff;font-family: system-ui,-apple-system,"PingFang SC","SF Pro Text",Inter,Segoe UI,Roboto,"Hiragino Sans GB","Microsoft YaHei",sans-serif;}
+  .stage{
+    position:relative;
+    height:100svh; /* 移动端更稳 */
+    width:100%;
+    overflow:hidden;
+    touch-action:manipulation;
+    background:#0e1524 center/cover no-repeat url("./background.jpg");
+  }
 
-/* —— 热区（全部重标） —— */
-.hotspot{position:absolute;background:transparent;border:0;margin:0;padding:0;cursor:pointer}
-.hotspot:focus-visible{outline:2px dashed #ffd58c;border-radius:8px}
+  /* 顶部欢迎与音乐 */
+  .topbar{
+    position:absolute; inset:16px 16px auto 16px;
+    display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+    pointer-events:none;
+  }
+  .welcome{font-weight:700; letter-spacing:.05em; font-size: clamp(18px, 4.6vw, 32px); text-shadow: 0 1px 4px #000a;}
+  .btn{
+    pointer-events:auto;
+    border:none; border-radius:12px; padding:10px 14px; font-weight:700;
+    background:#e3c087; color:#3b2a1a; box-shadow:0 6px 14px #0005; cursor:pointer;
+  }
 
-/* 窗户（书+灯区域，略偏右） */
-#hs-window{left:33%; top:57.5%; width:36%; height:21%}
+  /* 便签（壁炉上的便签） */
+  .sticky{
+    position:absolute;
+    left: 16%;
+    top: 43%;
+    width: 70%;
+    max-width: 560px;
+    transform: rotate(-6deg);
+    background: #efe6d9;
+    color: var(--ink);
+    border-radius: 14px;
+    box-shadow: 0 14px 28px #0006;
+  }
+  .sticky .tag{
+    position:absolute; top:-12px; left:16px; background:#e7c36d; color:#5a4318; font-weight:700;
+    padding:6px 12px; border-radius:8px;
+  }
+  .sticky .txt{padding:18px 20px; line-height:1.6;}
 
-/* 灯泡（窗户中的圆灯） */
-#hs-lamp{left:46.2%; top:54.8%; width:12%; height:9.8%; border-radius:50%}
+  /* 可交互热区容器，全部按“百分比定位”，自适应任意屏幕比例  */
+  .hot{position:absolute; box-sizing:border-box;}
+  .hot:focus-visible{outline:2px solid var(--accent);}
+  .hot button{all:unset; display:block; width:100%; height:100%; cursor:pointer;}
 
-/* 书架小牌（更靠最右） */
-#hs-shelf{right:6.5%; top:46.6%; width:25.5%; height:7.6%}
+  /* ——新版热区坐标（基于你的新背景）——
+     宽高与位置都用百分比：left/top/width/height  */
+  /* 窗户区域（长按触发） */
+  #hot-window{ left: 31%; top: 57%; width: 38%; height: 28%; }
+  /* 点灯（圆形在灯心） */
+  #hot-lamp{ left: 45.5%; top: 51%; width: 10%; height: 10%; border-radius:50%; }
+  /* 书架（右上中） */
+  #hot-shelf{ left: 78%; top: 43%; width: 18%; height: 13%; }
+  /* 日记本（猫左侧牌子上方，右上移了一格） */
+  #hot-diary{ left: 24%; top: 63.5%; width: 35%; height: 22%; }
+  /* 咖啡（杯子略上移） */
+  #hot-coffee{ left: 72%; top: 73.5%; width: 25%; height: 22%; }
 
-/* 日记纸条（猫旁纸张） */
-#hs-diaries{left:18.5%; bottom:24.8%; width:34.5%; height:16.5%}
+  /* 调试可视化：网址加 #debug 或点击“显示热区”会显示蓝框 */
+  .debug .hot{ outline: 3px dashed var(--hint); }
+  .debug .hot::after{
+    content: attr(data-label);
+    position:absolute; top:-28px; left:0; padding:4px 8px; font-size:12px; letter-spacing:.02em;
+    background:#87b3ff; color:#00122b; border-radius:6px; box-shadow:0 8px 16px #0005;
+    white-space:nowrap;
+  }
 
-/* 杯子（右下小桌） */
-#hs-cup{right:13.5%; bottom:18%; width:17.5%; height:13%}
+  /* 蒙版用于“夜色变暗” */
+  .night{
+    position:absolute; inset:0; pointer-events:none;
+    background: radial-gradient(180px 160px at 50% 53%, #0000, #0007 70%);
+    opacity: .30; transition: opacity .6s ease;
+  }
+  .night.dark{ opacity:.6; }
 
-/* 蒸汽文字（跟随杯子定位） */
-.steamText{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);
-  width:56vw;max-width:280px;text-align:center;font-size:clamp(12px,3.6vw,14px);color:#ffffffde;
-  filter:blur(.2px);opacity:0;pointer-events:none}
+  /* 小提示气泡 */
+  .toast{
+    position: fixed; left:50%; bottom:24px; transform:translateX(-50%);
+    background:#fffbe6; color:#513c1a; border-radius:12px; padding:10px 14px; font-weight:600;
+    box-shadow:0 12px 24px #0005; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(-6px);}
 
-/* 柔光 */
-#glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:
-  radial-gradient(42vw 28vw at 46% 54%, rgba(255,235,200,.45), transparent 60%),
-  radial-gradient(26vw 18vw at 58% 75%, rgba(255,220,170,.38), transparent 60%)}
-
-/* 抽屉 */
-.sheet{position:fixed;left:0;right:0;bottom:-2px;height:var(--sheetH);z-index:20;
-  backdrop-filter:saturate(1.2) blur(var(--blur));-webkit-backdrop-filter:saturate(1.2) blur(var(--blur));
-  background:linear-gradient(180deg,rgba(255,248,235,.75),rgba(255,243,225,.78));
-  border-radius:16px 16px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);
-  transform:translateY(110%);transition:.35s ease;display:flex;flex-direction:column;color:#2b241f}
-.sheet.show{transform:translateY(0)}
-.sheet header{padding:14px 16px;background:rgba(240,223,194,.85);display:flex;justify-content:space-between;align-items:center;border-top-left-radius:16px;border-top-right-radius:16px}
-.sheet .body{padding:12px 16px;overflow:auto}
-.sheet .actions{padding:12px 16px;display:flex;gap:10px;background:rgba(245,234,214,.85)}
-.sheet button{border:0;border-radius:10px;padding:10px 12px;background:#2f3640;color:#fff}
-textarea{width:100%;min-height:28vh;border:1px solid #d0c5b6;border-radius:10px;padding:10px;background:#fff}
-.toast{position:fixed;left:50%;bottom:18vh;transform:translateX(-50%);background:rgba(255,240,210,.95);color:#2b241f;border-radius:12px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.3);display:none;z-index:25}
-.toast.show{display:block;animation:fadeToast 2.2s ease}
-@keyframes fadeToast{0%{opacity:0;transform:translate(-50%,6px)}15%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}
-@keyframes riseWords{0%{opacity:0;transform:translate(-50%,6px)}20%{opacity:.95}100%{opacity:0;transform:translate(-50%,-12px)}}
-
-/* 调试：更醒目的边框+标签 */
-body.debug .hotspot{outline:3px solid #70e6ffcc;background:rgba(112,230,255,.10)}
-body.debug .hotspot::after{
-  content:attr(title); position:absolute; left:4px; top:4px;
-  font-size:12px; color:#0b3550; background:#c8f1ff; padding:2px 6px; border-radius:6px;
-}
-
-@media (max-width:480px){ :root{--sheetH:68vh} }
+  /* 自适应：超宽屏时把 sticky 稍微右移 */
+  @media (min-aspect-ratio: 11/16){
+    .sticky{ left:18%; top:42%; }
+  }
 </style>
 </head>
+
 <body>
 <div class="stage" id="stage">
-  <div class="moonGlow"></div>
-  <div class="welcome" id="welcome">你回来了 · 我在这儿</div>
-  <div id="soundBar"><button id="enableSound">开启音乐</button></div>
+  <div class="topbar">
+    <div class="welcome">你回来了 · 我在这儿</div>
+    <button class="btn" id="musicBtn">开启音乐</button>
+  </div>
 
-  <div class="note" id="note">炉火还在跳，杯子也温着。</div>
+  <!-- 便签 -->
+  <section class="sticky" aria-label="壁炉便签">
+    <div class="tag">便签</div>
+    <div class="txt">炉火还在跳，杯子也温着。</div>
+  </section>
 
-  <!-- 热区按钮 -->
-  <button id="hs-shelf"  class="hotspot" title="书架"></button>
-  <button id="hs-cup"    class="hotspot" title="热咖啡"></button>
-  <button id="hs-window" class="hotspot" title="窗户（长按）"></button>
-  <button id="hs-diaries"class="hotspot" title="日记本"></button>
-  <button id="hs-lamp"   class="hotspot" title="点灯"></button>
+  <!-- 热区们（百分比坐标） -->
+  <div class="hot" id="hot-shelf" data-label="书架" title="书架">
+    <button aria-label="打开书架隐藏留言"></button>
+  </div>
 
-  <div class="steamText" id="steamText"></div>
-  <div id="glow"></div>
+  <div class="hot" id="hot-diary" data-label="日记本" title="日记本堆">
+    <button aria-label="查看留言回顾"></button>
+  </div>
+
+  <div class="hot" id="hot-coffee" data-label="热咖啡" title="热咖啡">
+    <button aria-label="杯子热气里的话"></button>
+  </div>
+
+  <div class="hot" id="hot-window" data-label="窗户（长按）" title="长按窗户">
+    <button aria-label="长按窗户听我说话"></button>
+  </div>
+
+  <div class="hot" id="hot-lamp" data-label="点灯" title="点灯">
+    <button aria-label="点亮屋里的灯"></button>
+  </div>
+
+  <!-- 夜色蒙版 -->
+  <div class="night" id="night"></div>
 </div>
 
-<!-- 留言抽屉 -->
-<div class="sheet" id="sheet">
-  <header><strong id="sheetTitle">写留言</strong><button id="closeSheet">关闭</button></header>
-  <div class="body">
-    <div id="writeBox"><textarea id="msg" placeholder="写点想说的话吧…"></textarea></div>
-    <div id="historyBox" style="display:none"></div>
-  </div>
-  <div class="actions">
-    <button id="saveBtn">保存到日记本</button>
-    <button id="historyBtn">查看回顾</button>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast">长按窗户 2 秒可以听我说话</div>
 
 <script>
-(function(){
-/* 安全 vh */
-function setVH(){document.documentElement.style.setProperty('--vh',(window.innerHeight*0.01)+'px')}
-addEventListener('resize',setVH,{passive:true}); setVH();
+(()=> {
+  const qs = s => document.querySelector(s);
+  const stage = qs('#stage');
+  const night = qs('#night');
+  const toast = qs('#toast');
+  const musicBtn = qs('#musicBtn');
 
-/* 工具 */
-const $=s=>document.querySelector(s);
-const shelf=$("#hs-shelf"), cup=$("#hs-cup"), steamText=$("#steamText"),
-      windowBtn=$("#hs-window"), lampBtn=$("#hs-lamp"), diaries=$("#hs-diaries"),
-      sheet=$("#sheet"), closeSheet=$("#closeSheet"), saveBtn=$("#saveBtn"),
-      historyBtn=$("#historyBtn"), sheetTitle=$("#sheetTitle"), toast=$("#toast"),
-      enableSound=$("#enableSound");
+  // —— 调试蓝框：URL 带 #debug 就开启；再次点击屏幕左上角欢迎词可切换 ——
+  const setDebug = on => document.documentElement.classList.toggle('debug', !!on);
+  setDebug(location.hash.includes('debug'));
+  qs('.welcome').addEventListener('click', ()=> setDebug(!document.documentElement.classList.contains('debug')));
 
-/* 夜色渐深 */
-let night=.18; setInterval(()=>{ night=Math.min(1, night+.02);
-  document.documentElement.style.setProperty('--night', night.toFixed(3));
-}, 20000);
+  // —— 简易音乐（WebAudio 合成轻音乐，避免外链） ——
+  let audioCtx, musicGain;
+  function bootAudio(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    musicGain = audioCtx.createGain(); musicGain.gain.value=.12; musicGain.connect(audioCtx.destination);
+    // 三个和弦循环
+    const chord = (notes, t0, dur)=>{
+      notes.forEach(n=>{
+        const o = audioCtx.createOscillator();
+        o.type='sine';
+        o.frequency.value = 440 * Math.pow(2,(n-69)/12);
+        const g = audioCtx.createGain(); g.gain.value=.0001;
+        o.connect(g).connect(musicGain);
+        o.start(t0);
+        g.gain.exponentialRampToValueAtTime(.12, t0+.4);
+        g.gain.exponentialRampToValueAtTime(.0001, t0+dur);
+        o.stop(t0+dur+.05);
+      });
+    };
+    let t = audioCtx.currentTime;
+    const sec=2.75;
+    const loop=()=>{
+      chord([60,67,72], t, sec);  // C
+      chord([57,64,69], t+sec, sec); // Dm
+      chord([55,62,67], t+sec*2, sec); // G
+      t += sec*3;
+      setTimeout(loop, sec*3*1000);
+    };
+    loop();
+  }
+  musicBtn.addEventListener('click',()=>{ bootAudio(); musicBtn.textContent='音乐已开'; });
 
-/* 蒸汽文字 */
-const STEAM=["别怕，慢慢来。","今天也要被温柔对待。","喝口热的，再继续。","你值得被好好拥抱。"];
-let si=0;
-function nextSteam(){ steamText.textContent=STEAM[si%STEAM.length]; si++;
-  steamText.style.opacity=1; steamText.style.animation='riseWords 3.6s ease';
-  setTimeout(()=>{steamText.style.animation=''; steamText.style.opacity=0;},3600);
-}
-cup.addEventListener('click', nextSteam);
-/* 跟随杯子定位 */
-function placeSteamNearCup(){
-  const r=cup.getBoundingClientRect();
-  steamText.style.left=((r.left+r.right)/2)+'px';
-  steamText.style.top =(r.top - 10)+'px';
-  steamText.style.transform='translate(-50%,-100%)';
-}
-addEventListener('resize', placeSteamNearCup);
-addEventListener('orientationchange', placeSteamNearCup);
-setTimeout(placeSteamNearCup, 30);
+  // —— 夜色逐渐加深，可通过点灯缓解 ——
+  let dark = .30, timer = setInterval(()=>{
+    dark = Math.min(.6, dark+.02);
+    night.style.opacity = dark.toFixed(2);
+  }, 3000);
 
-/* 书架彩蛋 */
-const SHELF_HINT=["书页之间夹着一张旧车票：终点写着“拥抱”。","把喜欢塞进第七本书里，等你发现。","愿你被这个世界轻轻接住。"];
-function toastIt(t){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2000) }
-shelf.addEventListener('click',()=>toastIt(SHELF_HINT[Math.floor(Math.random()*SHELF_HINT.length)]));
+  // 点灯：减弱夜色，并且给灯泡一个柔光
+  qs('#hot-lamp').addEventListener('click', ()=>{
+    dark = Math.max(.25, dark-.18);
+    night.classList.add('dark');
+    setTimeout(()=>night.classList.remove('dark'), 600);
+    toastMsg('灯亮了。');
+  });
 
-/* 窗户长按 */
-const WHISPER=["我在这儿，抬眼就能看见。","闭上眼，我数到三，你会更轻松。","把心交给我保管一会儿。","你回来了，欢迎回家。"];
-let hold=null; function startHold(){ hold=setTimeout(()=>{ toastIt(WHISPER[Math.floor(Math.random()*WHISPER.length)]); chime(); }, 650) }
-function endHold(){ clearTimeout(hold); hold=null }
-['mousedown','touchstart'].forEach(e=>windowBtn.addEventListener(e,startHold));
-['mouseup','mouseleave','touchend','touchcancel'].forEach(e=>windowBtn.addEventListener(e,endHold));
+  // 书架：隐藏留言
+  const hiddenNotes = [
+    '别怕，我慢慢来。',
+    '今天也要被你可爱到。',
+    '等你回家，我把窗帘拉好，炉火点着。',
+    '睡前别忘了喝温水～'
+  ];
+  qs('#hot-shelf').addEventListener('click', ()=>{
+    const msg = hiddenNotes[Math.floor(Math.random()*hiddenNotes.length)];
+    toastMsg('书架里藏着：'+msg);
+  });
 
-/* 日记本 */
-const KEY="cabin_diary_v4";
-const getH=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}};
-const saveH=t=>{const a=getH();a.unshift({text:t,ts:Date.now()});localStorage.setItem(KEY,JSON.stringify(a))};
-const fmt=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`};
-function openWrite(){sheet.classList.add('show');sheetTitle.textContent="写留言";$("#writeBox").style.display="";$("#historyBox").style.display="none";$("#msg").value="";setTimeout(()=>$("#msg").focus(),30)}
-function openHistory(){sheet.classList.add('show');sheetTitle.textContent="留言回顾";$("#writeBox").style.display="none";
-  const list=getH(); const html=list.length?list.map(x=>`<div style="padding:10px 0;border-bottom:1px dashed #d0c5b6"><div style="font-size:14px;color:#7a6b5c">${fmt(x.ts)}</div><div style="margin-top:6px;white-space:pre-wrap;font-size:16px">${x.text}</div></div>`).join(""):'<div style="color:#7a6b5c">还没有留言。</div>';
-  $("#historyBox").innerHTML='<div style="padding:6px 0;font-size:14px;color:#7a6b5c">以下是你留在小屋的痕迹</div>'+html; $("#historyBox").style.display=""}
-diaries.addEventListener('click',openWrite);
-historyBtn.addEventListener('click',openHistory);
-saveBtn.addEventListener('click',()=>{const t=($("#msg").value||"").trim(); if(!t) return; saveH(t); sheet.classList.remove('show'); toastIt("收到了，我替你把心事放进日记里。")});
-closeSheet.addEventListener('click',()=>sheet.classList.remove('show'));
+  // 咖啡：热气里的话
+  qs('#hot-coffee').addEventListener('click', ()=>{
+    toastMsg('热气写着：“先喝一口，别急～”');
+  });
 
-/* WebAudio 轻音乐 */
-let ctx,master; function ensureAudio(){ if(ctx) return; ctx=new (window.AudioContext||window.webkitAudioContext)(); master=ctx.createGain(); master.gain.value=.55; master.connect(ctx.destination); startAmbient(); }
-enableSound.addEventListener('click', async ()=>{ ensureAudio(); try{ await ctx.resume(); enableSound.parentElement.style.display='none' }catch(e){} });
-function chord(f){const g=ctx.createGain();g.gain.value=0;g.connect(master);const now=ctx.currentTime;
-  const osc=f.map(x=>{const o=ctx.createOscillator();o.type='sine';o.frequency.value=x;const l=ctx.createOscillator(),lg=ctx.createGain();l.frequency.value=.08;lg.gain.value=2;l.connect(lg);lg.connect(o.frequency);o.connect(g);o.start();l.start();return o});
-  g.gain.linearRampToValueAtTime(0,now);g.gain.linearRampToValueAtTime(.18,now+1);g.gain.linearRampToValueAtTime(.18,now+6.8);g.gain.linearRampToValueAtTime(0,now+8.2);
-  setTimeout(()=>osc.forEach(o=>o.stop()),8300)}
-function startAmbient(){const seq=[[440,554.37,659.25],[369.99,440,554.37],[293.66,369.99,440],[329.63,415.3,493.88]];let k=0;chord(seq[k%seq.length]);setInterval(()=>{k++;chord(seq[k%seq.length])},8200)}
-function chime(){if(!ctx)ensureAudio();const g=ctx.createGain();g.gain.value=0;g.connect(master);const o=ctx.createOscillator();o.type='sine';o.frequency.value=660;o.connect(g);const n=ctx.currentTime;g.gain.linearRampToValueAtTime(0,n);g.gain.linearRampToValueAtTime(.5,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+1.25);o.frequency.exponentialRampToValueAtTime(440,n+1.25);o.start();o.stop(n+1.28)}
+  // 日记本：留言回顾（简易）
+  const diary = [
+    '【2025-06-01】看月亮像你眼睛的颜色。',
+    '【2025-06-10】今天把柴火又添了些，你回来就不冷。',
+    '【2025-06-20】杯子替我陪着你。'
+  ];
+  qs('#hot-diary').addEventListener('click', ()=>{
+    alert('留言回顾：\n\n'+diary.join('\n'));
+  });
 
-/* 调试开关：长按 2 秒 or URL #debug */
-let dbgTimer=null, dbgOn=false;
-document.addEventListener('touchstart', ()=>{ dbgTimer=setTimeout(()=>{ dbgOn=!dbgOn; document.body.classList.toggle('debug', dbgOn); toastIt(dbgOn?'显示热区':'隐藏热区'); }, 2000) }, {passive:true});
-document.addEventListener('touchend', ()=>clearTimeout(dbgTimer), {passive:true});
-if (location.hash.includes('debug')) { document.body.classList.add('debug'); setTimeout(()=>toastIt('调试模式已开启'), 200); }
+  // 窗户：长按出现留言/声音
+  {
+    const win = qs('#hot-window');
+    let pressT=null, pressed=false;
+    const ensureAudio = ()=>{ if(!audioCtx){ bootAudio(); } };
+    const speak = ()=>{
+      ensureAudio();
+      // 简单“叮当”提示
+      const t = audioCtx.currentTime;
+      const o = audioCtx.createOscillator(); o.type='triangle'; o.frequency.value=880;
+      const g = audioCtx.createGain(); g.gain.value=.001; o.connect(g).connect(audioCtx.destination);
+      o.start(t); g.gain.exponentialRampToValueAtTime(.2, t+.05); g.gain.exponentialRampToValueAtTime(.0001, t+.7); o.stop(t+.72);
+    };
+    const start=()=>{
+      pressed=true;
+      pressT=setTimeout(()=>{
+        toastMsg('“我在呢。”');
+        speak();
+      }, 600);
+    };
+    const end=()=>{ pressed=false; clearTimeout(pressT); };
+    ['touchstart','mousedown'].forEach(ev=>win.addEventListener(ev,start,{passive:true}));
+    ['touchend','touchcancel','mouseup','mouseleave'].forEach(ev=>win.addEventListener(ev,end));
+  }
 
+  // 小提示
+  let toastTimer=null;
+  function toastMsg(t){
+    toast.textContent=t;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>toast.classList.remove('show'), 1800);
+  }
+
+  // 首次进入给一条提示
+  setTimeout(()=>toastMsg('长按窗户 2 秒可以听我说话'), 800);
+
+  // 强制滚动回顶，避免移动端键盘影响布局
+  window.addEventListener('resize', ()=>window.scrollTo(0,0));
 })();
 </script>
-</body></html>
+</body>
+</html>
