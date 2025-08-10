@@ -1,0 +1,17 @@
+name: Add icon
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Write icon.png from base64
+        run: |
+          echo '${{ secrets.ICON_B64 || "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==" }}' | base64 -d > icon.png
+      - name: Commit icon
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add icon.png
+          git commit -m "Add icon.png" || echo "no changes"
+          git push
