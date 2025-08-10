@@ -17,8 +17,9 @@ html,body{height:100%;margin:0;background:#0d1324;color:#eae7e2;
   position:relative;width:100vw;height:calc(var(--vh)*100);overflow:hidden;
   /* —— 这里就是“画上的样子”：内联图片 —— */
   background:
-    radial-gradient(70vmax 55vmax at 50% 58%, rgba(0,0,0,.28), rgba(0,0,0,.70) 60%, rgba(0,0,0,.88) 100%),  /* 夜色罩层 */
-    url('data:image/jpeg;base64,{{BG}}') center 10%/cover no-repeat;  /* 手绘背景 */
+    background:
+  radial-gradient(70vmax 55vmax at 50% 58%, rgba(0,0,0,.28), rgba(0,0,0,.70) 60%, rgba(0,0,0,.88) 100%),
+  url('background.jpg') center 10%/cover no-repeat;  /* 手绘背景 */
   filter:brightness(calc(1 - var(--night)*.55));
 }
 .moonGlow{position:absolute;right:8vw;top:6vh;width:24vw;max-width:160px;aspect-ratio:1;border-radius:50%;box-shadow:0 0 45px 12px #ffeab4aa;pointer-events:none}
