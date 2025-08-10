@@ -25,7 +25,30 @@ animation:twinkle 8s linear infinite}
 .moon{position:absolute;width:120px;height:120px;border-radius:50%;right:8vw;top:6vh;background:radial-gradient(circle at 30% 30%,#fff9d0,#dcd6a8 60%,#c9c39b 70%,#0000 72%);box-shadow:0 0 40px 8px #fff7b5aa}
 .hills{position:absolute;left:0;right:0;bottom:18vh;height:20vh;background:radial-gradient(120% 100% at 10% 100%,#183046 50%,transparent 51%),radial-gradient(100% 100% at 50% 100%,#14283c 50%,transparent 51%),radial-gradient(120% 100% at 90% 100%,#183046 50%,transparent 51%);filter:brightness(calc(.8 - var(--night)*.2))}
 .trees{position:absolute;left:0;right:0;bottom:12vh;height:16vh;background:repeating-linear-gradient(90deg,transparent,transparent 20px,#102b24 21px,#102b24 22px),linear-gradient(#153b30,#0d241d);clip-path:polygon(0% 100%,0% 35%,5% 55%,8% 40%,12% 60%,15% 35%,18% 55%,20% 30%,23% 55%,26% 35%,30% 60%,35% 40%,40% 65%,45% 35%,50% 60%,55% 40%,60% 65%,65% 35%,70% 60%,75% 40%,80% 65%,85% 35%,90% 55%,95% 40%,100% 60%,100% 100%)}
-.cabin{position:absolute;left:50%;bottom:12vh;transform:translateX(-50%);width:min(76vw,980px);height:min(52vh,520px)}
+.cabin{position:absolute;left:50%;bottom:12vh;transform:translateX(-50%);width:min(76vw,980px);height:min(52vh,520px)}/* —— 手机自适应：整屋按比例缩放 —— */
+.cabin{
+  width:980px;            /* 基准尺寸（不再用 vw） */
+  height:520px;
+  left:50%;
+  bottom:12vh;
+  transform-origin:50% 100%;
+  transform:translateX(-50%) scale(var(--s,1));
+}
+
+/* 月亮、文案、便签等尺寸用 clamp，手机更友好 */
+.moon{width:clamp(82px,24vw,140px);height:clamp(82px,24vw,140px)}
+.welcome{top:clamp(3vh,6vh,7vh);font-size:clamp(18px,5.5vw,38px)}
+.note{width:clamp(170px,38vw,220px);font-size:clamp(12px,3.4vw,14px)}
+.steam-text{font-size:clamp(10px,2.8vw,13px)}
+.book{width:clamp(44px,10vw,60px);height:clamp(70px,16vw,90px)}
+.cup{width:clamp(48px,12vw,60px);height:clamp(48px,12vw,60px)}
+.lamp{width:clamp(30px,7.4vw,40px);height:clamp(30px,7.4vw,40px)}
+
+/* 小屏时把小屋稍微下移，避免顶到欢迎词 */
+@media (max-width: 480px){
+  .cabin{bottom:10vh}
+  .note{right:-6px}
+}
 
 /* 原小屋结构 */
 .house{position:absolute;left:20%;right:20%;bottom:10%;top:20%;background:linear-gradient(#6a4e3b,#5c3f2e);border:6px solid #3c2a20;border-bottom-width:10px;box-shadow:0 10px 0 #2d1e16 inset}
@@ -156,7 +179,18 @@ radial-gradient(10px 8px at 84% 62%,#6f9d64 40%,#0000 41%);filter:drop-shadow(0 
 <div id="whisper"><div class="bubble" id="whisperText"></div></div>
 
 <script>
-(function(){
+(function(){// —— 根据窗口计算缩放比例（手机适配）——
+function fitCabin(){
+  const baseW=980, baseH=520;               // 小屋基准尺寸
+  const w=window.innerWidth, h=window.innerHeight;
+  // 屏幕宽度和可用高度同时约束；预留上方欢迎词和下方草地
+  const scaleW = (w*0.92)/baseW;
+  const scaleH = ((h*0.70))/baseH;
+  const s = Math.min(scaleW, scaleH, 1.15); // 适当限制最大放大
+  document.documentElement.style.setProperty('--s', s.toFixed(3));
+}
+window.addEventListener('resize', fitCabin, {passive:true});
+fitCabin();
 const $=s=>document.querySelector(s);
 const note=$("#note"),shelf=$("#shelf"),cup=$("#cup"),steamText=$("#steamText"),windowEl=$("#window");
 const lamp=$("#lamp"),diaries=$("#diaries"),modal=$("#modal"),saveBtn=$("#saveBtn"),historyBtn=$("#historyBtn"),welcome=$("#welcome");
