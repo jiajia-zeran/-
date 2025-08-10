@@ -1,43 +1,28 @@
 <!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>森林小木屋 · 手绘风</title>
-<link rel="manifest" href="manifest.json"/><link rel="icon" href="icon.png"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>森林小木屋 · 手绘版</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="icon" href="icon.png"/>
 <meta name="theme-color" content="#0d1324">
 <style>
-:root{
-  --night:.18; --lamp:1; --vh:1vh;
-  --paper:#fff6e6; --ink:#3b3028;
-  --sheetH:66vh; --blur:18px;
-}
+:root{ --night:.18; --lamp:1; --vh:1vh; --paper:#fff6e6; --ink:#3b3028; --sheetH:66vh; --blur:18px }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;background:#0d1324;color:#eae7e2;
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC",sans-serif}
-
+html,body{height:100%;margin:0;background:#0d1324;color:#eae7e2;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","HarmonyOS Sans","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans CJK SC",sans-serif}
 .stage{
   position:relative;width:100vw;height:calc(var(--vh)*100);overflow:hidden;
-  /* —— 这里就是“画上的样子”：内联图片 —— */
   background:
-    background:
-  radial-gradient(70vmax 55vmax at 50% 58%, rgba(0,0,0,.28), rgba(0,0,0,.70) 60%, rgba(0,0,0,.88) 100%),
-  url('background.jpg') center 10%/cover no-repeat;  /* 手绘背景 */
+    radial-gradient(70vmax 55vmax at 50% 58%, rgba(0,0,0,.28), rgba(0,0,0,.70) 60%, rgba(0,0,0,.88) 100%),
+    url('background.jpg') center 10%/cover no-repeat;
   filter:brightness(calc(1 - var(--night)*.55));
 }
 .moonGlow{position:absolute;right:8vw;top:6vh;width:24vw;max-width:160px;aspect-ratio:1;border-radius:50%;box-shadow:0 0 45px 12px #ffeab4aa;pointer-events:none}
-
-.welcome{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);
-  transform:translateX(-50%);font-size:clamp(18px,6vw,36px);letter-spacing:2px;
-  text-shadow:0 2px 10px rgba(0,0,0,.4);opacity:0;animation:fadeIn 1.2s ease forwards}
+.welcome{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%);font-size:clamp(18px,6vw,36px);letter-spacing:2px;text-shadow:0 2px 10px rgba(0,0,0,.4);opacity:0;animation:fadeIn 1.2s ease forwards}
 @keyframes fadeIn{to{opacity:1;transform:translateX(-50%)}}
 #soundBar{position:absolute;right:16px;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:5}
 #enableSound{border:0;border-radius:12px;padding:10px 12px;background:#ffd58c;color:#3b2b1d;box-shadow:0 10px 26px rgba(0,0,0,.25)}
-
-.note{position:absolute;left:12%;bottom:48%;width:min(74vw,340px);max-width:360px;min-height:88px;
-  padding:12px 14px;background:var(--paper);color:var(--ink);border-radius:10px;
-  box-shadow:0 14px 26px rgba(0,0,0,.35);transform:rotate(-2.5deg);
-  font-size:clamp(12px,3.6vw,15px);line-height:1.6}
+.note{position:absolute;left:12%;bottom:48%;width:min(74vw,340px);max-width:360px;min-height:88px;padding:12px 14px;background:var(--paper);color:var(--ink);border-radius:10px;box-shadow:0 14px 26px rgba(0,0,0,.35);transform:rotate(-2.5deg);font-size:clamp(12px,3.6vw,15px);line-height:1.6}
 .note::before{content:"便签";position:absolute;top:-10px;left:12px;background:#efc76d;color:#3e2d20;padding:2px 8px;border-radius:4px;font-size:12px}
-
-/* 热区（大致按这张图的位置百分比） */
 .hotspot{position:absolute;background:transparent;border:0;padding:0;margin:0;cursor:pointer}
 .hotspot:focus-visible{outline:2px dashed #ffd58c;border-radius:8px}
 #hs-shelf{right:14%; top:34%; width:22%; height:6%}
@@ -45,38 +30,21 @@ html,body{height:100%;margin:0;background:#0d1324;color:#eae7e2;
 #hs-window{left:33%; top:49%; width:24%; height:12%}
 #hs-diaries{left:50%; bottom:20%; transform:translateX(-50%); width:30%; height:10%}
 #hs-lamp{left:44%; top:47%; width:7.5%; height:8%; border-radius:50%}
-
-/* 杯子蒸汽字 */
-.steamText{position:absolute;left:50%;bottom:calc(30% + 9%);transform:translateX(-50%);
-  width:56vw;max-width:280px;text-align:center;font-size:clamp(12px,3.6vw,14px);
-  color:#ffffffde;filter:blur(.2px);opacity:0;pointer-events:none}
-
-/* 温暖光场（提亮屋子一带） */
+.steamText{position:absolute;left:50%;bottom:calc(30% + 9%);transform:translateX(-50%);width:56vw;max-width:280px;text-align:center;font-size:clamp(12px,3.6vw,14px);color:#ffffffde;filter:blur(.2px);opacity:0;pointer-events:none}
 #glow{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:
   radial-gradient(42vw 28vw at 46% 54%, rgba(255,235,200,.55), transparent 60%),
   radial-gradient(26vw 18vw at 58% 75%, rgba(255,220,170,.48), transparent 60%)}
-
-/* 底部毛玻璃弹窗（留言/回顾） */
-.sheet{position:fixed;left:0;right:0;bottom:-2px;height:var(--sheetH);z-index:20;
-  backdrop-filter:saturate(1.2) blur(var(--blur));-webkit-backdrop-filter:saturate(1.2) blur(var(--blur));
-  background:linear-gradient(180deg,rgba(255,248,235,.75),rgba(255,243,225,.78));
-  border-radius:16px 16px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);
-  transform:translateY(110%);transition:.35s ease;display:flex;flex-direction:column;color:#2b241f}
+.sheet{position:fixed;left:0;right:0;bottom:-2px;height:var(--sheetH);z-index:20;backdrop-filter:saturate(1.2) blur(var(--blur));-webkit-backdrop-filter:saturate(1.2) blur(var(--blur));background:linear-gradient(180deg,rgba(255,248,235,.75),rgba(255,243,225,.78));border-radius:16px 16px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);transform:translateY(110%);transition:.35s ease;display:flex;flex-direction:column;color:#2b241f}
 .sheet.show{transform:translateY(0)}
 .sheet header{padding:14px 16px;background:rgba(240,223,194,.85);display:flex;justify-content:space-between;align-items:center;border-top-left-radius:16px;border-top-right-radius:16px}
 .sheet .body{padding:12px 16px;overflow:auto}
 .sheet .actions{padding:12px 16px;display:flex;gap:10px;background:rgba(245,234,214,.85)}
 .sheet button{border:0;border-radius:10px;padding:10px 12px;background:#2f3640;color:#fff}
 textarea{width:100%;min-height:28vh;border:1px solid #d0c5b6;border-radius:10px;padding:10px;background:#fff}
-
-/* 提示泡 */
-.toast{position:fixed;left:50%;bottom:18vh;transform:translateX(-50%);background:rgba(255,240,210,.95);
-  color:#2b241f;border-radius:12px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.3);display:none;z-index:25}
+.toast{position:fixed;left:50%;bottom:18vh;transform:translateX(-50%);background:rgba(255,240,210,.95);color:#2b241f;border-radius:12px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.3);display:none;z-index:25}
 .toast.show{display:block;animation:fadeToast 2.2s ease}
 @keyframes fadeToast{0%{opacity:0;transform:translate(-50%,6px)}15%{opacity:1;transform:translate(-50%,0)}85%{opacity:1}100%{opacity:0}}
 @keyframes riseWords{0%{opacity:0;transform:translate(-50%,6px)}20%{opacity:.95}100%{opacity:0;transform:translate(-50%,-12px)}}
-
-/* 小屏微调 */
 @media (max-width:480px){ :root{--sheetH:68vh} }
 </style>
 </head>
@@ -85,31 +53,20 @@ textarea{width:100%;min-height:28vh;border:1px solid #d0c5b6;border-radius:10px;
   <div class="moonGlow"></div>
   <div class="welcome" id="welcome">你回来了 · 我在这儿</div>
   <div id="soundBar"><button id="enableSound">开启音乐</button></div>
-
-  <!-- 固定文案便签 -->
   <div class="note" id="note">炉火还在跳，杯子也温着。</div>
-
-  <!-- 交互热区（透明按钮） -->
   <button id="hs-shelf"  class="hotspot" title="书架"></button>
   <button id="hs-cup"    class="hotspot" title="热咖啡"></button>
   <button id="hs-window" class="hotspot" title="窗户（长按）"></button>
   <button id="hs-diaries"class="hotspot" title="日记本"></button>
   <button id="hs-lamp"   class="hotspot" title="点灯"></button>
-
-  <!-- 杯子蒸汽字 -->
   <div class="steamText" id="steamText"></div>
-
-  <!-- 提亮屋子的暖光 -->
   <div id="glow"></div>
 </div>
 
-<!-- 底部毛玻璃弹窗：写留言 / 回顾 -->
 <div class="sheet" id="sheet">
   <header><strong id="sheetTitle">写留言</strong><button id="closeSheet">关闭</button></header>
   <div class="body">
-    <div id="writeBox">
-      <textarea id="msg" placeholder="写点想说的话吧…"></textarea>
-    </div>
+    <div id="writeBox"><textarea id="msg" placeholder="写点想说的话吧…"></textarea></div>
     <div id="historyBox" style="display:none"></div>
   </div>
   <div class="actions">
@@ -122,9 +79,8 @@ textarea{width:100%;min-height:28vh;border:1px solid #d0c5b6;border-radius:10px;
 
 <script>
 (function(){
-/* 真实视口高度（移动端适配） */
-function setVH(){document.documentElement.style.setProperty('--vh', (window.innerHeight*0.01)+'px')}
-addEventListener('resize', setVH, {passive:true}); setVH();
+function setVH(){document.documentElement.style.setProperty('--vh',(window.innerHeight*0.01)+'px')}
+addEventListener('resize',setVH,{passive:true}); setVH();
 
 const $=s=>document.querySelector(s);
 const shelf=$("#hs-shelf"), cup=$("#hs-cup"), steamText=$("#steamText"),
@@ -133,29 +89,24 @@ const shelf=$("#hs-shelf"), cup=$("#hs-cup"), steamText=$("#steamText"),
       historyBtn=$("#historyBtn"), sheetTitle=$("#sheetTitle"), toast=$("#toast"),
       enableSound=$("#enableSound");
 
-/* 夜色渐暗 & 点灯 */
 let night=.18; setInterval(()=>{ night=Math.min(1, night+.02); document.documentElement.style.setProperty('--night', night.toFixed(3)); }, 20000);
 let lamp=true; function setLamp(v){ lamp=v; document.documentElement.style.setProperty('--lamp', v?1:0); }
 lampBtn.addEventListener('click',()=>setLamp(!lamp));
 
-/* 蒸汽文字 */
 const STEAM=["别怕，慢慢来。","今天也要被温柔对待。","喝口热的，再继续。","你值得一切好事靠近。"];
 let si=0; function nextSteam(){ steamText.textContent=STEAM[si%STEAM.length]; si++; steamText.style.animation='riseWords 3.6s ease'; setTimeout(()=>steamText.style.animation='',3600); }
 cup.addEventListener('click', nextSteam); nextSteam();
 
-/* 书架彩蛋 & 提示泡 */
 const SHELF_HINT=["书页之间夹着一张旧车票：终点写着“拥抱”。","把喜欢悄悄塞进第七本书里，等你来发现。","愿你被这世界轻轻接住。"];
 function toastIt(t){ toast.textContent=t; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2000) }
 shelf.addEventListener('click',()=>toastIt(SHELF_HINT[Math.floor(Math.random()*SHELF_HINT.length)]));
 
-/* 窗户长按：低语 + 提示音 */
 const WHISPER=["我在这儿，抬眼就能看见。","闭上眼，我数到三，你会更轻松。","把心交给我保管一会儿。","你回来了，欢迎回家。"];
 let hold=null; function startHold(){ hold=setTimeout(()=>{ toastIt(WHISPER[Math.floor(Math.random()*WHISPER.length)]); chime(); }, 700) }
 function endHold(){ clearTimeout(hold); hold=null }
 ['mousedown','touchstart'].forEach(e=>windowBtn.addEventListener(e,startHold));
 ['mouseup','mouseleave','touchend','touchcancel'].forEach(e=>windowBtn.addEventListener(e,endHold));
 
-/* 日记：本地存储 + 底部弹窗 */
 const KEY="cabin_diary_v3";
 const getH=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}};
 const saveH=t=>{const a=getH();a.unshift({text:t,ts:Date.now()});localStorage.setItem(KEY,JSON.stringify(a))};
@@ -164,11 +115,11 @@ function openWrite(){sheet.classList.add('show');sheetTitle.textContent="写留�
 function openHistory(){sheet.classList.add('show');sheetTitle.textContent="留言回顾";$("#writeBox").style.display="none";
   const list=getH(); const html=list.length?list.map(x=>`<div style="padding:10px 0;border-bottom:1px dashed #d0c5b6"><div style="font-size:14px;color:#7a6b5c">${fmt(x.ts)}</div><div style="margin-top:6px;white-space:pre-wrap;font-size:16px">${x.text}</div></div>`).join(""):'<div style="color:#7a6b5c">还没有留言。</div>';
   $("#historyBox").innerHTML='<div style="padding:6px 0;font-size:14px;color:#7a6b5c">以下是你留在小屋的痕迹</div>'+html; $("#historyBox").style.display=""}
-diaries.addEventListener('click',openWrite); historyBtn.addEventListener('click',openHistory);
+diaries.addEventListener('click',openWrite);
+historyBtn.addEventListener('click',openHistory);
 saveBtn.addEventListener('click',()=>{const t=($("#msg").value||"").trim(); if(!t) return; saveH(t); sheet.classList.remove('show'); toastIt("收到了，我替你把心事放进日记里。")});
 closeSheet.addEventListener('click',()=>sheet.classList.remove('show'));
 
-/* WebAudio：环境 & 提示音（免素材） */
 let ctx,master; function ensureAudio(){ if(ctx) return; ctx=new (window.AudioContext||window.webkitAudioContext)(); master=ctx.createGain(); master.gain.value=.6; master.connect(ctx.destination); startAmbient(); }
 enableSound.addEventListener('click', async ()=>{ ensureAudio(); try{ await ctx.resume(); enableSound.parentElement.style.display='none' }catch(e){} });
 function chord(f){const g=ctx.createGain();g.gain.value=0;g.connect(master);const now=ctx.currentTime;
