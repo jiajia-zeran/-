@@ -141,7 +141,21 @@ function chord(f){const g=ctx.createGain();g.gain.value=0;g.connect(master);cons
   g.gain.linearRampToValueAtTime(0,now);g.gain.linearRampToValueAtTime(.18,now+1);g.gain.linearRampToValueAtTime(.18,now+6.5);g.gain.linearRampToValueAtTime(0,now+8);
   setTimeout(()=>osc.forEach(o=>o.stop()),8200)}
 function startAmbient(){const seq=[[440,554.37,659.25],[369.99,440,554.37],[293.66,369.99,440],[329.63,415.3,493.88]];let k=0;chord(seq[k%seq.length]);setInterval(()=>{k++;chord(seq[k%seq.length])},8000)}
-function chime(){if(!ctx)ensureAudio();const g=ctx.createGain();g.gain.value=0;g.connect(master);const o=ctx.createOscillator();o.type='sine';o.frequency.value=660;o.connect(g);const n=ctx.currentTime;g.gain.linearRampToValueAtTime(0,n);g.gain.linearRampToValueAtTime(.5,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+1.2);o.frequency.exponentialRampToValueAtTime(440,n+1.2);o.start();o.stop(n+1.25)}
+function chime(){if(!ctx)ensureAudio();const g=ctx.createGain();g.gain.value=0;g.connect(master);const o=ctx.createOscillator();o.type='sine';o.frequency.value=660;o.connect(g);const n=ctx.currentTime;g.gain.linearRampToValueAtTime(0,n);g.gain.linearRampToValueAtTime(.5,n+.02);g.gain.exponentialRampToValueAtTime(.001,n+1.2);o.frequency.exponentialRampToValueAtTime(440,n+1.2);o.start();o.stop(n+1.25)}/* —— 调试开关：长按 2 秒显示/隐藏热区框 —— */
+let dbgTimer=null, dbgOn=false;
+document.addEventListener('touchstart', ()=>{ dbgTimer=setTimeout(()=>{ dbgOn=!dbgOn; document.body.classList.toggle('debug', dbgOn); toastIt(dbgOn?'显示热区':'隐藏热区'); }, 2000) }, {passive:true});
+document.addEventListener('touchend', ()=>clearTimeout(dbgTimer), {passive:true});
+
+/* —— 蒸汽文字跟随杯子 —— */
+function placeSteamNearCup(){
+  const r=cup.getBoundingClientRect();
+  const st=steamText.style;
+  st.left = ( (r.left+r.right)/2 )+'px';
+  st.top  = (r.top - 12)+'px';
+  st.transform = 'translate(-50%,-100%)';
+}
+addEventListener('resize', placeSteamNearCup);
+placeSteamNearCup();
 })();
 </script>
 </body></html>
