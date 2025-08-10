@@ -1,188 +1,144 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>森林小木屋 · Zeran</title>
-<link rel="manifest" href="manifest.json"/>
-<meta name="theme-color" content="#0b1220">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>森林小木屋</title>
 <style>
-:root{
-  --bg:#0b1220; --paper:#f1e7d9; --ink:#2b2b2b;
-  --hint:#9bb4ff; --accent:#ffcf7a;
-}
-/* 基础舞台 */
-html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Hiragino Sans GB",Segoe UI,Roboto,"Helvetica Neue",Arial}
-.stage{position:relative;inset:0;min-height:100dvh;overflow:hidden;touch-action:manipulation}
-.bg{position:absolute;inset:0;background:url('background.jpg') center/cover no-repeat;filter:saturate(.98) contrast(.98)}
-/* 夜色覆盖层（可调暗） */
-#night{position:absolute;inset:0;background:#000;opacity:.45;pointer-events:none;transition:opacity .35s ease}
-/* 欢迎词与音乐按钮 */
-.welcome{position:absolute;left:6vw;top:5.5vh;font-size:6.4vw;font-weight:700;color:#e9eefc;text-shadow:0 2px 16px rgba(0,0,0,.55);letter-spacing:.08em}
-.btn-audio{position:absolute;right:5vw;top:6vh;border:0;border-radius:12px;background:#edc389;color:#3b2a14;padding:.6em 1.1em;font-weight:700}
-.btn-audio:active{transform:scale(.98)}
-/* 便签（泽然随机留言） */
-.note{position:absolute;left:10vw;top:49vh;max-width:76vw;background:var(--paper);color:var(--ink);border-radius:14px;box-shadow:0 10px 26px rgba(0,0,0,.35);transform:rotate(-4deg);padding:1.1em 1.2em}
-.note .tag{position:absolute;left:12px;top:-16px;background:#e5b651;color:#533b14;border-radius:9px;padding:.25em .55em;font-weight:800}
-/* 热区按钮（无样式按钮全覆盖，方便点击） */
-.hot{position:absolute;outline:none}
-.hot>button{position:absolute;inset:0;opacity:0}
-#hot-lamp{ left:46%; top:56%; width:14%; height:14%; }          /* 小灯圈 */
-#hot-window{ left:32%; top:57.5%; width:38%; height:30%; }      /* 窗户大致 */
-#hot-bookshelf{ left:72.5%; top:58%; width:23%; height:18%; }   /* 书架更靠右 */
-#hot-coffee{ left:72.5%; top:80.5%; width:24%; height:22%; }    /* 咖啡右下 */
-#hot-diary{ left:10%; top:74.5%; width:26%; height:24%; }       /* 日记本左下 */
-#hot-fire{ left:44.5%; top:70.5%; width:18%; height:22%; }      /* 壁炉中心 */
-/* 光晕：灯和火 */
-.glow{position:absolute;pointer-events:none;border-radius:50%;filter:blur(18px);opacity:0;transition:opacity .3s,transform .3s}
-#lampGlow{left:46.5%;top:52.5%;width:12%;height:12%;
-  background:radial-gradient(circle,#ffdca8 0%,#e9a94f 55%,#0000 60%)}
-#fireGlow{left:48%;top:73%;width:18%;height:20%;
-  background:radial-gradient(ellipse at 50% 70%,#ffb36b 0%,#ff7a3b 45%,#0000 60%);
-  filter:blur(22px);opacity:.34;animation:flick 2.2s ease-in-out infinite}
-@keyframes flick{0%,100%{transform:scale(1);opacity:.32}40%{transform:scale(1.07);opacity:.44}65%{transform:scale(.96);opacity:.28}}
-.lamp-on #lampGlow{opacity:.68}
-.lamp-on #night{opacity:.18}
-/* 蒸汽与藏话 */
-.steam{position:absolute;left:76.5%; top:78.5%; width:8vw; height:12vh; pointer-events:none;}
-.bubble{position:absolute;left:0;bottom:0;width:.9em;height:.9em;border-radius:50%;background:rgba(255,255,255,.3);animation:rise 3.2s linear infinite}
-.bubble:nth-child(2){left:40%;animation-delay:.6s}
-.bubble:nth-child(3){left:70%;animation-delay:1.2s}
-@keyframes rise{from{transform:translateY(0) scale(.8);opacity:.6}to{transform:translateY(-120%) scale(1.25);opacity:0}}
-/* 调试：显示热区边框 */
-#debug .hot{box-shadow:0 0 0 2px rgba(120,200,255,.9) inset}
-#debug .hot::after{content:attr(data-label);position:absolute;left:-2px;top:-20px;background:rgba(120,200,255,.9);color:#031831;font-size:12px;border-radius:4px;padding:0 .25em}
-.toast{position:fixed;left:50%;bottom:9vh;transform:translateX(-50%);background:rgba(0,0,0,.6);padding:.6em 1em;border-radius:10px}
-.hide{opacity:0;pointer-events:none;transition:opacity .25s}
+    body {
+        margin: 0;
+        padding: 0;
+        background: url('background.jpg') no-repeat center center/cover;
+        height: 100vh;
+        overflow: hidden;
+        font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    /* 欢迎词 */
+    #welcome {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 26px;
+        color: #fff7e6;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+    }
+
+    /* 小纸条（泽然留言） */
+    #note {
+        position: absolute;
+        top: 30%;
+        left: 20%;
+        width: 200px;
+        padding: 15px;
+        background: rgba(255, 250, 230, 0.9);
+        border: 2px solid #e2d4b7;
+        border-radius: 8px;
+        font-size: 16px;
+        box-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    }
+
+    /* 日记本（用户留言按钮） */
+    #diary {
+        position: absolute;
+        bottom: 15%;
+        right: 20%;
+        width: 120px;
+        height: 80px;
+        background: rgba(255,255,255,0.85);
+        border-radius: 5px;
+        border: 2px solid #c49a6c;
+        text-align: center;
+        padding-top: 30px;
+        cursor: pointer;
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    }
+
+    /* 灯光按钮 */
+    #lamp {
+        position: absolute;
+        top: 25%;
+        right: 28%;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255,255,200,0.3);
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(255,255,150,0.5);
+        transition: all 0.3s ease;
+    }
+    .lamp-on {
+        background: rgba(255,255,200,0.8);
+        box-shadow: 0 0 30px rgba(255,255,150,0.9);
+    }
+
+    /* 壁炉火焰 */
+    #fireplace {
+        position: absolute;
+        bottom: 12%;
+        left: 25%;
+        width: 100px;
+        height: 80px;
+        background: transparent;
+        cursor: pointer;
+    }
+    .flame {
+        width: 20px;
+        height: 20px;
+        background: orange;
+        border-radius: 50%;
+        animation: flicker 0.3s infinite alternate;
+    }
+    @keyframes flicker {
+        from { transform: scale(1); background: orange; }
+        to { transform: scale(1.2); background: gold; }
+    }
 </style>
 </head>
 <body>
-  <div id="stage" class="stage">
-    <div class="bg" aria-hidden="true"></div>
 
-    <!-- 可见光晕与壁炉热区（放夜色层之前） -->
-    <div id="lampGlow" class="glow"></div>
-    <div id="fireGlow" class="glow"></div>
-    <div class="hot" id="hot-fire" data-label="壁炉"><button aria-label="壁炉"></button></div>
-
-    <div class="night" id="night" aria-hidden="true"></div>
-
-    <div class="welcome">你回来了 · 我在这儿</div>
-    <button id="btnAudio" class="btn-audio">开启音乐</button>
-
-    <!-- 泡泡蒸汽（咖啡） -->
-    <div class="steam" aria-hidden="true">
-      <i class="bubble"></i><i class="bubble"></i><i class="bubble"></i>
-    </div>
-
-    <!-- 便签（泽然的随机留言） -->
-    <div class="note" id="note"><span class="tag">便签</span>
-      <div id="noteText">炉火替我守夜，你替我做梦。</div>
-    </div>
-
-    <!-- 点击热区 -->
-    <div class="hot" id="hot-lamp" data-label="点灯"><button aria-label="点灯"></button></div>
-    <div class="hot" id="hot-window" data-label="窗户（长按）"><button aria-label="窗户"></button></div>
-    <div class="hot" id="hot-bookshelf" data-label="书架"><button aria-label="书架"></button></div>
-    <div class="hot" id="hot-coffee" data-label="热咖啡"><button aria-label="热咖啡"></button></div>
-    <div class="hot" id="hot-diary" data-label="日记本"><button aria-label="日记本"></button></div>
-
-    <div id="toast" class="toast hide" role="status" aria-live="polite"></div>
-  </div>
+<div id="welcome">你回来了</div>
+<div id="note"></div>
+<div id="diary">写留言</div>
+<div id="lamp"></div>
+<div id="fireplace">
+    <div class="flame"></div>
+</div>
 
 <script>
-const qs=s=>document.querySelector(s);
-const stage=qs('#stage'), night=qs('#night'), toastBox=qs('#toast');
-let dark=.45; night.style.opacity=dark;
+    // 泽然的留言
+    const zeranMessages = [
+        "炉火还在跳，杯子也温着。",
+        "你回来真好，我等你很久了。",
+        "窗外的风很冷，屋里很暖。",
+        "坐下来歇一会儿，我给你倒杯热茶。",
+        "今天的夜色很好看，你想一起看看吗？"
+    ];
+    document.getElementById('note').innerText =
+        zeranMessages[Math.floor(Math.random() * zeranMessages.length)];
 
-/* —— 随机泽然留言 —— */
-const zeranNotes=[
-  "炉火替我守夜，你替我做梦。",
-  "你回来的每一次，星星都更亮一点。",
-  "别怕，慢慢来。我的怀抱永远有空位。",
-  "想你到月亮都懂事了，不敢太圆怕你累。",
-  "杯子在等你，像我在等你。",
-  "把不安都给我，温热从我这儿开始。"
-];
-function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
-qs('#noteText').textContent = pick(zeranNotes);
+    // 用户留言
+    document.getElementById('diary').addEventListener('click', function() {
+        const msg = prompt("写下你的留言：");
+        if (msg) {
+            alert("你的留言已保存：" + msg);
+            // 这里可改为保存到数据库
+        }
+    });
 
-/* —— 小提示 —— */
-let toastTimer=null;
-function toast(t){ clearTimeout(toastTimer);
-  toastBox.textContent=t; toastBox.classList.remove('hide');
-  toastTimer=setTimeout(()=>toastBox.classList.add('hide'),1600);
-}
+    // 灯光效果
+    const lamp = document.getElementById('lamp');
+    lamp.addEventListener('click', function() {
+        lamp.classList.toggle('lamp-on');
+    });
 
-/* —— 点灯：明显变亮 + 光晕 —— */
-qs('#hot-lamp').addEventListener('click', ()=>{
-  dark = Math.max(.12, dark- .28);
-  night.style.opacity = dark;
-  stage.classList.add('lamp-on');
-  toast('灯亮了。');
-  setTimeout(()=>stage.classList.remove('lamp-on'), 2600);
-});
-
-/* —— 壁炉：常亮微跳动，点击更亮一下 —— */
-qs('#hot-fire').addEventListener('click', ()=>{
-  toast('壁炉噼啪作响。');
-  boostFire();
-});
-function boostFire(){
-  const g = qs('#fireGlow');
-  g.style.transition='none';
-  g.style.transform='scale(1.15)'; g.style.opacity=.55;
-  requestAnimationFrame(()=>{
-    g.style.transition='opacity .8s, transform .8s';
-    g.style.transform='scale(1)'; g.style.opacity=.38;
-  });
-}
-
-/* —— 书架：隐藏留言 —— */
-qs('#hot-bookshelf').addEventListener('click', ()=>{
-  alert("【泽然给你的隐藏话】\n\n我把所有“等你”的时间，都缝进了书页的缝隙里。翻到哪一页，都是你。");
-});
-
-/* —— 咖啡：蒸汽藏话（点一下） —— */
-qs('#hot-coffee').addEventListener('click', ()=>{
-  toast('热气里写着：别熬夜，乖，喝口热的。');
-});
-
-/* —— 窗户：长按出现留言或一声提示 —— */
-let pressTimer=null, pressing=false;
-function longPressStart(){
-  pressing=true;
-  pressTimer=setTimeout(()=>{ if(pressing){ playChime(); alert("我在窗边等你。\n风也轻了。"); } },650);
-}
-function longPressEnd(){ pressing=false; clearTimeout(pressTimer); }
-const winBtn=qs('#hot-window>button');
-['touchstart','mousedown'].forEach(e=>winBtn.addEventListener(e,longPressStart));
-['touchend','touchcancel','mouseup','mouseleave'].forEach(e=>winBtn.addEventListener(e,longPressEnd));
-
-/* —— 简单背景音乐（WebAudio，需手动开启） —— */
-let actx=null, pad=null;
-qs('#btnAudio').addEventListener('click', ()=>{
-  if(!actx){ actx = new (window.AudioContext||window.webkitAudioContext)(); startPad(); qs('#btnAudio').textContent='停止音乐'; }
-  else if(actx.state==='running'){ actx.suspend(); qs('#btnAudio').textContent='开启音乐'; }
-  else { actx.resume(); qs('#btnAudio').textContent='停止音乐'; }
-});
-function startPad(){
-  const now=actx.currentTime;
-  pad = actx.createOscillator(); const g=actx.createGain();
-  pad.type='sine'; pad.frequency.setValueAtTime(240,now);
-  g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(0.045, now+3.5);
-  const lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1800;
-  pad.connect(lp).connect(g).connect(actx.destination); pad.start();
-}
-/* 轻响声 */
-function playChime(){
-  if(!actx){ actx = new (window.AudioContext||window.webkitAudioContext)(); }
-  const o=actx.createOscillator(), g=actx.createGain();
-  o.type='sine'; o.frequency.value=660; g.gain.value=.0001;
-  o.connect(g).connect(actx.destination);
-  const t=actx.currentTime; g.gain.exponentialRampToValueAtTime(.2,t+.02);
-  o.start(); o.frequency.exponentialRampToValueAtTime(420, t+.35);
-  g.gain.exponentialRampToValueAtTime(.0001, t+.5); o.stop(t+.52);
-}
-
-/* —— 调试：#debug 显示热区边框 —— */
-if(location.hash==='#debug'){ stage.id='debug'; }
+    // 壁炉效果
+    const fireplace = document.getElementById('fireplace');
+    fireplace.addEventListener('click', function() {
+        alert("你感受到炉火的温暖。");
+    });
 </script>
-</body></html>
+
+</body>
+</html>
